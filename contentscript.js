@@ -1,3 +1,12 @@
+// Compakt
+
+// These are variables for Twitch elements related to chat.
+// We expose them here so changes can be easily made if Twitch changes them.
+twitchChatUlClass = ".chat-lines";
+twitchChatMessageClass1 = ".message-line";
+twitchChatMessageClass2 = ".chat-line";
+twitchChatMessageContent = ".message";
+
 // Ordered Dictionary class
 dict = {};
 order = [];
@@ -9,17 +18,14 @@ function wrapInRepeatedWordClass(str) {
 }
 
 function compressStr(msg) {
+  // Simple compression. Adjacent, repeated strings are compressed to one instance
+  // followed by "x [n]" where n is the number of times it is repeated.
   var msgArray = msg.split(" ");
   var prevString = msgArray[0];
   var count = 1;
   var newStr = "";
   for (var i = 1; i < msgArray.length; i++) {
     var word = msgArray[i];
-    if (word === "" || word === "\n") {
-      // Newlines and blank spaces are HTML we skipped.
-      // We won't need this if we handle them correctly.
-      continue;
-    }
 
     if (prevString === word) {
       count += 1;
@@ -41,37 +47,18 @@ function compressStr(msg) {
   return newStr;
 }
 
-// Simple compression. Adjacent, repeated strings are compressed to one instance
-// followed by "x [n]" where n is the number of times it is repeated.
-function compressMessage(msg) {
-  var msgArray = msg.split(" ");
-  var prevString = msgArray[0];
-  var count = 1;
-  var newStr = [];
-  for(var i = 1; i < msgArray.length; i++) {
-    var word = msgArray[i];
-    if(word === "" || word === "\n"){
-      // Newlines and blank spaces are HTML we skipped.
-      // We won't need this if we handle them correctly.
-      continue;
-    }
-    if(prevString === word) {
-      count += 1;
-    } else {
-      newStr.push({str: prevString, count: count});
-      count = 1;
-      prevString = word;
-    }
-  }
-  if(count > 1) {
-    count += 1;
-  }
-  newStr.push({str: prevString, count: count});
-
-  return newStr;
-}
-
 function compressMessageReadable(messageElement) {
+  // Takes a Twitch chat message element and makes a Compakt version.
+  // For a message, each node type is handled differently.
+  //   1.Text nodes with repeated, consecutive words are replaced with an element
+  // showing the word once and a multiplier.
+  //   2. Comment nodes are skipped.
+  //   3. Repeated, consecutive element nodes are replaced with an element showing
+  // the element once next to a multplier equal to the number of times it's shown.
+
+  // Note: we assume if we ever encounter any element nodes that they are
+  // Twitch emoticons.
+
   var chatLine = messageElement.contents();
 
   var prevElement = null;
@@ -79,23 +66,32 @@ function compressMessageReadable(messageElement) {
 
   for (var i = 0; i < chatLine.length; i++) {
     var type = chatLine[i].nodeType;
-    var ele = $(chatLine[i]);
     if (type === 3) {
       // Text node
       if (chatLine[i].data.trim() === "") {
+        // Gotta skip those weird nodes that are not rendered on screen but
+        // exist in the HTML doc.
         continue;
       }
 
+      // Replaces repeated, consecutive words with the multiplier element.
+      // HTML will be injected here. We assume it's safe because we wrote
+      // compressStr()
       var newMsg = compressStr(chatLine[i].data.trim());
+
+      // Replaces text node with element node.
+      // TODO: we make a text node into HTML. CHECK FOR SCRIPT INJECTION!
       var temp = document.createElement('span');
       temp.innerHTML = newMsg;
       while (temp.firstChild) {
           chatLine[i].parentNode.insertBefore(temp.firstChild, chatLine[i]);
       }
       chatLine[i].parentNode.removeChild(chatLine[i]);
+      prevElement = null;
     } else if (type === 8) {
       // Comment Node
       continue;
+      prevElement = null;
     } else if (type === 1) {
       var ele = $(chatLine[i]);
       var eleText = ele.text().trim();
@@ -129,13 +125,8 @@ function removeRepeatedWords(msg) {
   var newStr = "";
   for(var i = 1; i < msgArray.length; i++) {
     var word = msgArray[i];
-    if(word === "" || word === "\n") {
-      // Newlines and blank spaces are HTML we skipped.
-      // We won't need this if we handle them correctly.
-      continue;
-    }
     if(prevString != word) {
-      newStr += prevString;
+      newStr += prevString + " ";
       prevString = word;
     }
   }
@@ -145,36 +136,52 @@ function removeRepeatedWords(msg) {
 }
 
 function makeKeyFromChatMessage(messageElement) {
+  // Takes a Twitch chat message element and creates a key.
+  // The objective is that the key uniquely identifies this message.
+  // For a message, each node type is handled differently.
+  // Text nodes have repeated, consecutive words removed.
+  // Comment nodes are ignored.
+  // Element nodes are checked if they are repeated in series.
+  // Note: we assume if we ever encounter any element nodes that they are
+  // Twitch emoticons.
+
   var chatLine = messageElement.contents();
 
-  var prevElement = null;
+  var prevEmote = null;
   var key = "";
 
   for (var i = 0; i < chatLine.length; i++) {
     var type = chatLine[i].nodeType;
-    var ele = $(chatLine[i]);
     if (type === 3) {
       // Text node
-      if (ele.text().trim() === "") {
+      var txt = chatLine[i].textContent;
+      if (txt.trim() === "") {
         continue;
       }
-      var newMsg = removeRepeatedWords(ele.text().trim());
+      var newMsg = removeRepeatedWords(txt.trim());
       key += newMsg + " ";
+      prevEmote = null;
     } else if (type === 8) {
-      // Comment Node
+      // skip comment nodes
+      prevEmote = null;
       continue;
     } else if (type === 1) {
-      // Node should be an emoticon
-      if (prevElement) {
-        if (prevElement != ele.text()) {
-          key += prevElement + " ";
-          prevElement = ele.text();
+      // Element node, should be an emoticon
+      // ele.text() should be the Twitch name for the emoticon
+      var ele = $(chatLine[i]);
+      var emoticonName = ele.text().trim();
+      if (prevEmote) {
+        if (prevEmote != emoticonName) {
+          key += prevEmote + " ";
+          prevEmote = emoticonName;
         }
       } else {
-        prevElement = ele.text();
+        prevEmote = emoticonName;
       }
     }
   }
+
+  // Lower case it!
   return key.toLowerCase();
 }
 
@@ -184,38 +191,48 @@ var chatObserver = new MutationObserver(function (mutations) {
   mutations.forEach(function (mutation) {
     // Chat message should be the added node
     mutation.addedNodes.forEach(function (addedNode) {
+      // At this point it's potentially a chatMessage object.
       var chatMessage = $(addedNode);
-      if(!chatMessage.hasClass("message-line")) {
+      if(!chatMessage.is(twitchChatMessageClass1, twitchChatMessageClass2)) {
+        // this isn't a chat message, skip processing.
         return;
       }
       // Grab the actual span element with the message content
-      var messageElement = chatMessage.children(".message");
+      var messageElement = chatMessage.children(twitchChatMessageContent);
 
+      // Make key from message.
       var key = makeKeyFromChatMessage(messageElement);
       if(key in dict) {
-        // Update Cached Message
+        // Update cached message
         var msgEle = $(dict[key].ele);
+
+        // If this is the first repeat, we need to add some elements.
         if(dict[key].count === 1) {
-          // First repeat found. Add count element.
+          // Add count element.
           msgEle.append("<span class='count'></span>");
 
-          // Add user to dropdown menu of people who have said this repeated msg.
+          // Add a dropdown menu of people who have said this repeated msg.
           var originalMsgFrom = msgEle.children(".from");
+          // Add this write after the username and before the colon.
           originalMsgFrom.after("<div class='compakt-dropdown'><button class='compakt-dropbtn'>&#9660;</button><div class='compakt-dropdown-content'></div></div>");
         }
+
         // Display new count.
         dict[key].count += 1;
         var countEle = msgEle.children(".count");
         countEle.text(dict[key].count);
 
+        // Add user to dropdown menu of a repeated message.
         var dropdownMenu = msgEle.find(".compakt-dropdown-content");
         var userEle = chatMessage.children(".from");
         dropdownMenu.append(userEle);
 
         // Don't show it, it's a repeat.
+        // Note: we would like to .remove() it but this causes errors with
+        // the ember framework Twitch uses.
         chatMessage.hide();
       } else {
-        // add unique message to buffer.
+        // Add unique message to cacheh.
 
         // Sanitize the message.
         // Method does this "in-place" (edits existing DOM element).
@@ -225,14 +242,13 @@ var chatObserver = new MutationObserver(function (mutations) {
         dict[key] = {ele: chatMessage, count: 1};
         order.push(key);
 
-        // pop old ones if necessary.
+        // Pop old messages if we're over the size limit.
         if(order.length > size) {
           // Add a checkmark to distinguish that the message has expired.
           var oldChatMessage = dict[order[0]].ele;
-          //var oldMsg = oldChatMessage.children(".count");
-          //oldMsg.append("&#10003;");
           oldChatMessage.append("&#10003;");
 
+          // now delete.
           delete dict[order.shift()];
         }
       }
@@ -246,17 +262,16 @@ var config = { attributes: false, childList: true, characterData: false };
 // The chat, particularly the element ".chat-lines", is dynamically loaded.
 // We need to wait until the page is done loading everything in order to be
 // able to grab it.
-// We hijack MutationObserver as a way to check that when a child is added if
-// the chat now exists.
+// We hijack MutationObserver as a way to check if an added, the chat.
 var htmlBody = $("body")[0];
 var chatLoadedObserver = new MutationObserver(function (mutations, observer) {
   mutations.forEach(function (mutation) {
-    var chatSelector = $(".chat-lines");
+    var chatSelector = $(twitchChatUlClass);
     if(chatSelector.length > 0) {
-      // This is the class name for the chat side-panel on Twitch
+      // Select the node element.
       var target = chatSelector[0];
 
-      // pass in the target node, as well as the observer options
+      // Pass in the target node, as well as the observer options
       chatObserver.observe(target, config);
 
       // Alert page action that we found a chat and we're going to get to work.
@@ -266,7 +281,7 @@ var chatLoadedObserver = new MutationObserver(function (mutations, observer) {
         }
       });
 
-      // Unregister chatLoadedObserver. We don't need to check for the chat element.
+      // Unregister chatLoadedObserver. We don't need to check for the chat element anymore.
       observer.disconnect();
     }
   })
