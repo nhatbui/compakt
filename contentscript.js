@@ -69,46 +69,8 @@ function removeRepeats(msg) {
   return newStr;
 }
 
-// Returns a compressedMessage Object
-function compressMessage2(msg) {
-  var msgArray = msg.split(" ");
-  var prevString = msgArray[0];
-  var count = 1;
-  var reps = [];
-  var newMsgArray = [];
-  for(var i = 1; i < msgArray.length; i++) {
-    var word = msgArray[i];
-    if(word === "" || word === "\n"){
-      // Newlines and blank spaces are HTML we skipped.
-      // We won't need this if we handle them correctly.
-      continue;
-    }
-    if(prevString === word) {
-      count += 1;
-    } else {
-      newMsgArray.push(prevString);
-      if(count > 1) {
-        reps.push({word: prevString, count: count});
-      }
-      count = 1;
-      prevString = word;
-    }
-  }
-  newMsgArray.push(prevString);
-  if(count > 1) {
-    reps.push({word: prevString, count: count});
-  }
-
-  return {wordArray: newMsgArray, countQueue: reps};
-}
-
-function wordArrayToStr(array) {
-  var newStr = "";
-  for(var i = 0; i < array.length - 1; i++) {
-    newStr += array[i] + " ";
-  }
-  newStr += array[i + 1];
-  return newStr;
+function makeKeyFromChatMessage(msg) {
+  return removeRepeats(msg).toLowerCase();
 }
 
 // Attach listener that acts when a new chat message appears.
@@ -126,35 +88,48 @@ var chatObserver = new MutationObserver(function (mutations) {
       //replaceMessageText(messageElement, "");
       //messageElement.append(newMessage);
 
-      var key = removeRepeats(messageElement.text()).toLowerCase();
+      var key = makeKeyFromChatMessage(messageElement.text());
       if(key in dict) {
-        // increment count for this message object.
+        // Update Cached Message
         var msgEle = $(dict[key].ele);
         if(dict[key].count === 1) {
           // First repeat found. Add count element.
           msgEle.append("<span class='count'></span>");
+
+          // Add user to dropdown menu of people who have said this repeated msg.
+          var originalMsgFrom = msgEle.children(".from");
+          originalMsgFrom.after("<div class='compakt-dropdown'><button class='compakt-dropbtn'>&#9660;</button><div class='compakt-dropdown-content'></div></div>");
         }
+        // Display new count.
         dict[key].count += 1;
         var countEle = msgEle.children(".count");
         countEle.text(dict[key].count);
 
-        // TODO: add user to dropdown menu of people who have said this repeated msg.
+        var dropdownMenu = msgEle.find(".compakt-dropdown-content");
+        var userEle = chatMessage.children(".from");
+        dropdownMenu.append("<a href='#'>" + userEle.text() + "</a>");
 
-        // Remove it, it's a repeat.
+        // Don't show it, it's a repeat.
         chatMessage.hide();
       } else {
         // add unique message to buffer.
+
+        // Sanitize the message.
         var compressedMsg = compressMessage(messageElement.text());
         replaceMessageText(messageElement, "");
         messageElement.append(compressedMsg);
+
+        // Update the ordered dictionary
         dict[key] = {ele: chatMessage, count: 1};
         order.push(key);
 
         // pop old ones if necessary.
         if(order.length > size) {
+          // Add a checkmark to distinguish that the message has expired.
           var oldChatMessage = dict[order[0]].ele;
           var oldMsg = oldChatMessage.children(".message");
           oldMsg.append("&#10003;");
+
           delete dict[order.shift()];
         }
       }
