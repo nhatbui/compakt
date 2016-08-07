@@ -30,15 +30,14 @@
 
 /* Dropdown Content (Hidden by Default) */
 .compakt-dropdown-content {
+    background-color: white;
     display: none;
     position: absolute;
-    min-width: 160px;
 }
 
 /* Links inside the dropdown */
-.compakt-dropdown-content a {
+.compakt-dropdown-content .from {
     padding: 2px 4px;
-    text-decoration: none;
     display: block;
 }
 
