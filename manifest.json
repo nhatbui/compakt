@@ -3,7 +3,10 @@
 
   "name": "Twitch Compakt",
   "description": "Condense Twitch Chat",
-  "version": "1.0",
+  "version": "0.1",
+  "icons": {
+    "128": "icon_128.png"
+  },
 
   "background": {
     "scripts": ["checkIfTwitch.js"],
@@ -22,7 +25,16 @@
     {
       "matches": ["https://www.twitch.tv/*"],
       "js": ["jquery-3.1.0.slim.min.js", "contentscript.js"],
-      "css": ["compaktstyles.css"]
+      "css": ["compaktstyles.css"],
+      "exclude_globs": ["https://www.twitch.tv/directory/*",
+        "https://www.twitch.tv/p/*",
+        "https://www.twitch.tv/products/*",
+        "https://www.twitch.tv/*/manager*",
+        "https://www.twitch.tv/*/dashboard",
+        "https://www.twitch.tv/broadcast",
+        "https://www.twitch.tv/messages/*",
+        "https://www.twitch.tv/settings"
+      ]
     }
   ],
 
