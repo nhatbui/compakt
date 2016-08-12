@@ -21,15 +21,14 @@ Pull requests always welcome!
 ### Developing
 
 #### Dependencies
-You'll need [NodeJS+NPM](https://nodejs.org/en/download/) and [Browserify](http://browserify.org/) to build the extension.
-
-```npm install -g browserify```
+You'll need [NodeJS+NPM](https://nodejs.org/en/download/).
 
 #### Build
 ```
 cd /path/to/compakt
 git clone https://github.com/nhatbui/compakt.git
-browserify ./src/main.js contentscript.js
+npm install
+browserify ./src/main.js -o contentscript.js
 ```
 
 #### Developing/Testing
