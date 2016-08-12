@@ -1,4 +1,4 @@
-# ![Compakt](icon_128.png) Twitch Compakt
+# ![Compakt](assets/icon_128.png) Twitch Compakt
 Twitch Chat streamlining. Condenses repeated words, emotes, and messages.
 
 Let Twitch chat be Twitch chat. Don't miss any more buried messages. Reduce clutter on the screen.
