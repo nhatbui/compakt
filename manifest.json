@@ -6,7 +6,7 @@
   "description": "Condense Twitch Chat",
   "version": "0.1",
   "icons": {
-    "128": "icon_128.png"
+    "128": "./assets/icon_128.png"
   },
 
   "background": {
@@ -16,8 +16,8 @@
 
   "page_action": {
     "default_icon": {
-      "19": "icon19.png",
-      "38": "icon38.png"
+      "19": "./assets/icon19.png",
+      "38": "./assets/icon38.png"
     },
     "default_title": "Compakt"
   },
@@ -25,8 +25,12 @@
   "content_scripts": [
     {
       "matches": ["https://www.twitch.tv/*"],
-      "js": ["jquery-3.1.0.slim.min.js", "contentscript.js"],
-      "css": ["compaktstyles.css"],
+      "js": [
+        "contentscript.js"
+      ],
+      "css": [
+        "./css/compaktstyles.css"
+      ],
       "exclude_globs": ["https://www.twitch.tv/directory/*",
         "https://www.twitch.tv/p/*",
         "https://www.twitch.tv/products/*",

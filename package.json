@@ -1,0 +1,28 @@
+{
+  "name": "twitch_compakt",
+  "version": "0.1.0",
+  "description": "Condense Twitch Chat",
+  "main": "./src/main.js",
+  "dependencies": {
+    "browserify": "^13.1.0",
+    "jquery": "^3.1.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nhatbui/compakt.git"
+  },
+  "keywords": [
+    "Twitch",
+    "Javascript"
+  ],
+  "author": "Nhat Bui",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/nhatbui/compakt/issues"
+  },
+  "homepage": "https://github.com/nhatbui/compakt#readme"
+}
