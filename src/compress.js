@@ -1,186 +1,184 @@
 var $ = require("jquery");
+var SuffixTree = require("./suffixtree.js");
 
-// Helper Methods
-function wrapInRepeatedWordClass(str) {
-    return "<span class='repeated-word'>" + str + "</span>";
-}
 
-function compressStr(msg) {
-    // Simple compression. Adjacent, repeated strings are compressed to one instance
-    // followed by "x [n]" where n is the number of times it is repeated.
-    var msgArray = msg.split(" ");
-    var prevString = msgArray[0];
-    var count = 1;
-    var newStr = "";
-    for (var i = 1; i < msgArray.length; i++) {
-        var word = msgArray[i];
+var sentenceArrayToString = function(sentenceArray) {
+    var str = "";
+    for(var i = 0; i < sentenceArray.length - 1; i++) {
+        str += sentenceArray[i] + " ";
+    }
+    str += sentenceArray[i];
+    return str;
+};
 
-        if (prevString === word) {
-            count += 1;
+var msgHTMLToSentenceArray = function(msgHTML) {
+    var sentenceArray = [];
+    var emoteDictionary = {};
+    var contents = msgHTML.contents();
+    for (var i = 0; i < contents.length; i++) {
+        var nodeType = contents[i].nodeType;
+        if(nodeType === 3) {
+            // Text Node
+            // Trim, split, and push each word onto the sentence array
+            var txt = contents[i].textContent.trim();
+            if(txt != "") {
+                var txtArray = txt.split(" ");
+                for(var j = 0; j < txtArray.length; j++) {
+                    sentenceArray.push(txtArray[j]);
+                }
+            }
+        } else if(nodeType === 1) {
+            // Element node, assume native Twitch emote
+            // Note: could be an injected emote by another extension e.g. BetterTTV
+            // TODO: Compatibility with other extensions!
+
+            // Extract the name for the emote.
+            var element = $(contents[i]);
+            var emoteName = element.text().trim();
+            sentenceArray.push(emoteName);
+
+            emoteDictionary[emoteName] = element.html();
+        }
+    }
+
+    return {
+        array: sentenceArray,
+        emotes: emoteDictionary
+    }
+};
+
+var RabinKarpRemoveRepeats = function(pattern, document) {
+    var hash = {};
+    hash[pattern] = true;
+    var newDoc = "";
+    var foundInstance = false;
+    var startIter = 0;
+    var endIter = pattern.length;
+    for (;endIter <= document.length;) {
+        var checkSubstring = document.slice(startIter, endIter);
+        var match = checkSubstring in hash;
+        if(match && foundInstance) {
+            // if this is the 2nd or more occurrence...
+            // ...don't add to new str.
+            startIter += pattern.length;
+            endIter += pattern.length;
+        } else if (match) {
+            // Found first instance of the repeated substring.
+            foundInstance = true;
+            newDoc += checkSubstring;
+            startIter += pattern.length;
+            endIter += pattern.length;
         } else {
-            if (count === 1) {
-                newStr += prevString + " ";
-            } else {
-                newStr += wrapInRepeatedWordClass(prevString + " x" + count) + " ";
-            }
-            count = 1;
-            prevString = word;
+            foundInstance = false;
+            newDoc += document[startIter];
+            startIter++;
+            endIter++;
         }
     }
-    if (count === 1) {
-        newStr += prevString;
-    } else {
-        newStr += wrapInRepeatedWordClass(prevString + " x" + count);
-    }
-    return newStr;
-}
+    newDoc += document.slice(startIter, document.length);
+    return newDoc;
+};
 
-function compressMessageReadable(messageElement) {
-    // Takes a Twitch chat message element and makes a Compakt version.
-    // For a message, each node type is handled differently.
-    //   1.Text nodes with repeated, consecutive words are replaced with an element
-    // showing the word once and a multiplier.
-    //   2. Comment nodes are skipped.
-    //   3. Repeated, consecutive element nodes are replaced with an element showing
-    // the element once next to a multplier equal to the number of times it's shown.
-
-    // Note: we assume if we ever encounter any element nodes that they are
-    // Twitch emoticons.
-
-    var chatLine = messageElement.contents();
-
-    var prevElement = null;
+var RabinKarpTagRepeats = function(pattern, document) {
+    var hash = {};
+    hash[pattern] = true;
     var count = 0;
-
-    for (var i = 0; i < chatLine.length; i++) {
-        var type = chatLine[i].nodeType;
-        if (type === 3) {
-            // Text node
-            if (chatLine[i].data.trim() === "") {
-                // Gotta skip those weird nodes that are not rendered on screen but
-                // exist in the HTML doc.
-                continue;
+    var newDoc = "";
+    var foundInstance = false;
+    var startIter = 0;
+    var endIter = pattern.length;
+    for (;endIter <= document.length;) {
+        var checkSubstring = document.slice(startIter, endIter);
+        var match = checkSubstring in hash;
+        if(match && foundInstance) {
+            // if this is the 2nd or more occurrence...
+            // ...don't add to new str.
+            count += 1;
+            startIter += pattern.length;
+            endIter += pattern.length;
+        } else if (match) {
+            // Found first instance of the repeated substring.
+            count = 1;
+            foundInstance = true;
+            startIter += pattern.length;
+            endIter += pattern.length;
+        } else {
+            if(count > 1 && foundInstance) {
+                // The end of a repeated match.
+                newDoc += "<span class='repeated-word'> " + pattern + " x" + count + "</span> ";
+            } else if(foundInstance) {
+                // One match
+                newDoc += pattern;
             }
-
-            // Replaces repeated, consecutive words with the multiplier element.
-            // HTML will be injected here. We assume it's safe because we wrote
-            // compressStr().
-            var newMsg = compressStr(chatLine[i].data.trim());
-
-            // Replaces text node with element node.
-            // IMPORTANT NOTE:
-            // We assume that Twitch performs excellent protection from injection
-            // and when we are parsing any text nodes, they are SAFE.
-            // They are safe because Compakt receives them after Twitch sanitizes them.
-            // There could be issues if something changes the text on the DOM (like another
-            // extension) before we process it.
-            var temp = document.createElement('span');
-            temp.innerHTML = newMsg;
-            while (temp.firstChild) {
-                chatLine[i].parentNode.insertBefore(temp.firstChild, chatLine[i]);
-            }
-            chatLine[i].parentNode.removeChild(chatLine[i]);
-            prevElement = null;
-        } else if (type === 8) {
-            // Comment Node
-            prevElement = null;
-        } else if (type === 1) {
-            var ele = $(chatLine[i]);
-            var eleText = ele.text().trim();
-            // Node should be an emoticon
-            if (prevElement) {
-                if (prevElement === eleText) {
-                    // This is a repeated element. Remove it.
-                    ele.remove();
-                    count += 1;
-                } else {
-                    // The end of a run. (could be a run of length 1!)
-                    if (count > 1) {
-                        ele.append(" x" + count);
-                        ele.addClass("repeated-word");
-                    }
-                    prevElement = eleText;
-                    count = 1;
-                }
-            } else {
-                // This is the first emoticon we see. Set it and continue.
-                prevElement = eleText;
-                count = 1;
-            }
+            newDoc += document[startIter];
+            count = 0;
+            foundInstance = false;
+            startIter++;
+            endIter++;
         }
     }
-}
+    if(count > 1 && foundInstance) {
+        // The end of a repeated match.
+        newDoc += "<span class='repeated-word'> " + pattern + " x" + count + "</span> ";
+    } else if(foundInstance) {
+        // One match
+        newDoc += pattern;
+    }
+    newDoc += document.slice(startIter, document.length);
+    return newDoc;
+};
 
-function removeRepeatedWords(msg) {
-    var msgArray = msg.split(" ");
-    var prevString = msgArray[0];
-    var newStr = "";
-    for (var i = 1; i < msgArray.length; i++) {
-        var word = msgArray[i];
-        if (prevString != word) {
-            newStr += prevString + " ";
-            prevString = word;
+var constructHTMLFromSentenceArray = function (sentenceArr) {
+    var newHTML = "";
+    for(var i = 0; i < sentenceArr.array.length - 1; i++) {
+        if(sentenceArr.array[i] in sentenceArr.emotes) {
+            newHTML += sentenceArr.emotes[sentenceArr.array[i]] + " ";
+        } else {
+            newHTML += sentenceArr.array[i] + " ";
         }
     }
-    newStr += prevString;
-
-    return newStr;
-}
-
-function makeKeyFromChatMessage(messageElement) {
-    // Takes a Twitch chat message element and creates a key.
-    // The objective is that the key uniquely identifies this message.
-    // For a message, each node type is handled differently.
-    // Text nodes have repeated, consecutive words removed.
-    // Comment nodes are ignored.
-    // Element nodes are checked if they are repeated in series.
-    // Note: we assume if we ever encounter any element nodes that they are
-    // Twitch emoticons.
-
-    var chatLine = messageElement.contents();
-
-    var prevEmote = null;
-    var key = "";
-
-    for (var i = 0; i < chatLine.length; i++) {
-        var type = chatLine[i].nodeType;
-        if (type === 3) {
-            // Text node
-            var txt = chatLine[i].textContent;
-            if (txt.trim() === "") {
-                continue;
-            }
-            var newMsg = removeRepeatedWords(txt.trim());
-            key += newMsg + " ";
-            prevEmote = null;
-        } else if (type === 8) {
-            // skip comment nodes
-            prevEmote = null;
-
-        } else if (type === 1) {
-            // Element node, should be an emoticon
-            // ele.text() should be the Twitch name for the emoticon
-            var ele = $(chatLine[i]);
-            var emoticonName = ele.text().trim();
-            if (prevEmote) {
-                if (prevEmote != emoticonName) {
-                    key += prevEmote + " ";
-                    prevEmote = emoticonName;
-                }
-            } else {
-                prevEmote = emoticonName;
-            }
-        }
+    if(sentenceArr.array[i] in sentenceArr.emotes) {
+        newHTML += sentenceArr.emotes[sentenceArr.array[i]];
+    } else {
+        newHTML += sentenceArr.array[i];
     }
+    return "<span class='message' style>" + newHTML + "</span>";
+};
 
-    // Lower case it!
-    return key.toLowerCase();
-}
+var compressedHTML = function (msgEle) {
+    // msgEle is a chat message HTML element from Twitch.
+    var sentenceArray = msgHTMLToSentenceArray(msgEle);
+    var sentence = sentenceArrayToString(sentenceArray.array);
+    sentence += " ";
+    var suffixTree = new SuffixTree(sentence);
+    var repeated = suffixTree.node.getLongestRepeatedSubString();
+    if(repeated.length > 1) {
+        var newSentence = RabinKarpTagRepeats(repeated, sentence);
+        sentenceArray.array = newSentence.split(" ");
+        return constructHTMLFromSentenceArray(sentenceArray);
+    } else {
+        // No repetitions. Return null.
+        return null;
+    }
+};
 
-module.exports.wrapInRepeatedWordClass = wrapInRepeatedWordClass;
-module.exports.compressStr = compressStr;
-module.exports.compressMessageReadable = compressMessageReadable;
-module.exports.removeRepeatedWords = removeRepeatedWords;
-module.exports.makeKeyFromChatMessage = makeKeyFromChatMessage;
+var compressedKey = function (msgEle) {
+    // msgEle is a chat message HTML element from Twitch.
+    var sentenceArray = msgHTMLToSentenceArray(msgEle);
+    var sentence = sentenceArrayToString(sentenceArray.array);
+    // This is a helper space.
+    sentence += " ";
+    var suffixTree = new SuffixTree(sentence);
+    var repeated = suffixTree.node.getLongestRepeatedSubString();
+    if(repeated.length > 1) {
+        return RabinKarpRemoveRepeats(repeated, sentence);
+    } else {
+        return sentence;
+    }
+};
 
-
+module.exports.getKey = compressedKey;
+module.exports.getCompressedHTML = compressedHTML;
+//module.exports.removeRepeats = RabinKarpRemoveRepeats;
+//module.exports.sentenceArrayToHTML = constructHTMLFromSentenceArray;
+//module.exports.sentenceArrayToString = sentenceArrayToString;
