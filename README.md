@@ -3,7 +3,8 @@ Twitch Chat streamlining. Condenses repeated words, emotes, and messages.
 
 Let Twitch chat be Twitch chat. Don't miss any more buried messages. Reduce clutter on the screen.
 
-[Compakt in action! (youtube)](https://www.youtube.com/watch?v=twy-K8oruDc)
+[Compakt in action! (YouTube)](https://youtu.be/uGSn__YSf9w)
+As you can see, there's still a lot to be done!
 
 ## Features
 * Compresses repeated words e.g. "kappa kappa kappa" = "kappa x3"
