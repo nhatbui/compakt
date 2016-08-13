@@ -4,10 +4,15 @@
   "description": "Condense Twitch Chat",
   "main": "./src/main.js",
   "dependencies": {
-    "browserify": "^13.1.0",
     "jquery": "^3.1.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-browserify": "^0.5.1",
+    "gulp-rename": "^1.2.2",
+    "gulp-uglify": "^2.0.0",
+    "gulp-util": "^3.0.7"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
