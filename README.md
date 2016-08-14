@@ -7,8 +7,7 @@ Let Twitch chat be Twitch chat. Don't miss any more buried messages. Reduce clut
 As you can see, there's still a lot to be done!
 
 ## Features
-* Compresses repeated words e.g. "kappa kappa kappa" = "kappa x3"
-* Compresses repeated emotes similar to how words are compressed.
+* Compresses longest repeated, non-overlapping "phrase" e.g. "Kappa Yolo Kappa Yolo" becomes "Kappa Yolo x2".
 * Repeated messages are grouped together.
 * Hover to see a list of all the users who uttered the same message.
 
@@ -29,7 +28,7 @@ You'll need [NodeJS+NPM](https://nodejs.org/en/download/).
 cd /path/to/compakt
 git clone https://github.com/nhatbui/compakt.git
 npm install
-browserify ./src/main.js -o contentscript.js
+gulp // or 'gulp --type=production' for a uglified file.
 ```
 
 #### Developing/Testing
