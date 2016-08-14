@@ -297,7 +297,7 @@ var compressedKey = function (msgEle) {
 var key = function (msgEle) {
     // msgEle is a chat message HTML element from Twitch.
     var sentenceArray = msgHTMLToSentenceArray(msgEle);
-    return sentenceArrayToString(sentenceArray.array);
+    return sentenceArrayToString(sentenceArray.array).toLowerCase();
 };
 
 module.exports.getCompressedKey = compressedKey;
