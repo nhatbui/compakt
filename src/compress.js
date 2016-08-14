@@ -1,6 +1,126 @@
 var $ = require("jquery");
-var SuffixTree = require("./suffixtree.js");
+var SuffixArray = require("./suffixarray.js");
 
+
+var longestCommonPrefix =  function(s1, s2) {
+    var l1 = s1.length;
+    var l2 = s2.length;
+    var min = l1 < l2 ? l1 : l2;
+    for (var i = 0; i < min; i++) {
+        if (s1[i] != s2[i]) {
+            return s1.slice(0, i);
+        }
+    }
+    return s1.slice(0, min);
+};
+
+var getLongestRepeatedSubString = function(sentence) {
+    var suffixArray = SuffixArray(sentence);
+    var size = suffixArray.length;
+
+    var best = "";  // longest, repeated, non-overlapping substring.
+    var minLen = 2; // length of the best match. Initialize to determine a min.
+
+    for(var i = 1; i < size; i++) {
+        var s1 = sentence.slice(suffixArray[i]);
+        var s2 = sentence.slice(suffixArray[i - 1]);
+
+        // If the string isn't long enough, skip it.
+        // A string less than minLen has no change of having a prefix
+        // of, at minimum, length minLen.
+        if(s1.length < minLen || s2.length < minLen) {
+            continue;
+        }
+
+        var distance = Math.abs(s1.length - s2.length);
+        // make sure suffixes further apart than current best.
+        // if not, a new longest repeated NON-OVERLAPPING substring
+        // is not possible.
+        if (distance < minLen) {
+            continue;
+        }
+
+        // if there was a prefix match of length minLen, make sure
+        // that it is not overlapping.
+        if((suffixArray[i-1] + minLen) > suffixArray[i]) {
+            continue;
+        }
+
+        // if neighboring suffixes don't even match as far as
+        // the best match, don't need to check more carefully.
+        if (s1.slice(0, minLen) != s2.slice(0, minLen)) {
+            continue;
+        }
+
+        // check if match is not overlapping.
+        var possibleMatch = longestCommonPrefix(s1, s2);
+        //console.log("possible match: '" + possibleMatch + "' (" + possibleMatch.length + ")");
+        //console.log("sentence index at 'i': " + suffixArray[i]);
+        //console.log("sentence index at 'i-1': " + suffixArray[i-1]);
+        if((suffixArray[i-1] + possibleMatch.length) <= suffixArray[i]) {
+            //console.log("match");
+            best = possibleMatch;
+            minLen = best.length + 1;
+        }
+    }
+
+    return best;
+};
+
+/*
+var getLongestRepeatedSubString = function(sentence) {
+    var suffixArray = SuffixArray(sentence);
+    var size = suffixArray.length;
+
+    var best = "";  // longest, repeated, non-overlapping substring.
+    var minLen = 2; // length of the best match. Initialize to determine a min.
+    var neighbors_to_check = 1;
+
+    for(var i = 1; i < size; i++) {
+        var s1 = sentence.slice(suffixArray[i]);
+        for(var j = neighbors_to_check; j > 0; j--) {
+            var s2 = sentence.slice(suffixArray[i - j]);
+            var distance = Math.abs(s1.length - s2.length);
+            // make sure suffixes further apart than current best.
+            // if not, a new longest repeated NON-OVERLAPPING substring
+            // is not possible.
+            if (distance < minLen) {
+                if (s1.length >= minLen &&
+                    s2.length >= minLen &&
+                    s1.slice(0, minLen) === s2.slice(0, minLen)) {
+                    neighbors_to_check = Math.max(neighbors_to_check, j + 1);
+                } else {
+                    neighbors_to_check = j;
+                }
+                continue;
+            }
+
+             // if there was a prefix match of length minLen, make sure
+             // that it is not overlapping.
+             if((suffixArray[i-1] + minLen) > suffixArray[i]) {
+                continue;
+             }
+
+            // if neighboring suffixes don't even match as far as
+            // the best match, don't need to check more carefully.
+            if (s1.slice(0, minLen) != s2.slice(0, minLen)) {
+                neighbors_to_check = j;
+                continue;
+            }
+
+            best = longestCommonPrefix(s1, s2);
+            minLen = best.length + 1;
+            if (best.length === distance) {
+                neighbors_to_check = Math.max(neighbors_to_check, j + 1);
+            } else {
+                neighbors_to_check = j;
+            }
+        }
+    }
+
+    return best;
+}
+*/
 
 var sentenceArrayToString = function(sentenceArray) {
     var str = "";
@@ -149,11 +269,10 @@ var compressedHTML = function (msgEle) {
     // msgEle is a chat message HTML element from Twitch.
     var sentenceArray = msgHTMLToSentenceArray(msgEle);
     var sentence = sentenceArrayToString(sentenceArray.array);
-    sentence += " ";
-    var suffixTree = new SuffixTree(sentence);
-    var repeated = suffixTree.node.getLongestRepeatedSubString();
+    // Add end-of-text marker.
+    var repeated = getLongestRepeatedSubString(sentence + "$");
     if(repeated.length > 1) {
-        var newSentence = RabinKarpTagRepeats(repeated, sentence);
+        var newSentence = RabinKarpTagRepeats(repeated, " " + sentence);
         sentenceArray.array = newSentence.split(" ");
         return constructHTMLFromSentenceArray(sentenceArray);
     } else {
@@ -166,19 +285,25 @@ var compressedKey = function (msgEle) {
     // msgEle is a chat message HTML element from Twitch.
     var sentenceArray = msgHTMLToSentenceArray(msgEle);
     var sentence = sentenceArrayToString(sentenceArray.array);
-    // This is a helper space.
-    sentence += " ";
-    var suffixTree = new SuffixTree(sentence);
-    var repeated = suffixTree.node.getLongestRepeatedSubString();
+    // Add end-of-text marker.
+    var repeated = getLongestRepeatedSubString(sentence + "$");
     if(repeated.length > 1) {
-        return RabinKarpRemoveRepeats(repeated, sentence);
+        return RabinKarpRemoveRepeats(repeated, " " + sentence);
     } else {
         return sentence;
     }
 };
 
-module.exports.getKey = compressedKey;
+var key = function (msgEle) {
+    // msgEle is a chat message HTML element from Twitch.
+    var sentenceArray = msgHTMLToSentenceArray(msgEle);
+    return sentenceArrayToString(sentenceArray.array);
+};
+
+module.exports.getCompressedKey = compressedKey;
+module.exports.getKey = key;
 module.exports.getCompressedHTML = compressedHTML;
+//module.exports.getLongestRepeatedSubString = getLongestRepeatedSubString;
 //module.exports.removeRepeats = RabinKarpRemoveRepeats;
 //module.exports.sentenceArrayToHTML = constructHTMLFromSentenceArray;
 //module.exports.sentenceArrayToString = sentenceArrayToString;
