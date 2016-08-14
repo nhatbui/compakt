@@ -4,7 +4,7 @@
   "name": "Twitch Compakt",
   "short_name": "Compakt",
   "description": "Condense Twitch Chat",
-  "version": "0.1",
+  "version": "0.5",
   "icons": {
     "128": "./assets/icon_128.png"
   },
