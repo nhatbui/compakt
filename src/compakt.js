@@ -90,8 +90,8 @@ function Compakt(size) {
                 // Make key from message.
                 var key = clib.getKey(messageElement);
                 checkIfMessageRepeated(key, dict, order, size, messageElement, chatMessage);
-            })
-        })
+            });
+        });
     });
 }
 
