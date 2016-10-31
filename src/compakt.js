@@ -2,8 +2,16 @@ var $ = require("jquery");
 var clib = require("./compress.js");
 var twitch = require("./twitchvars.js");
 
-function checkIfMessageRepeated(key, dict, messageElement, chatMessage) {
+function checkMessageSimilarity(key, dict) {
   if (key in dict) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+function checkIfMessageRepeated(key, dict, order, size, messageElement, chatMessage) {
+  if (checkMessageSimilarity(key, dict)) {
     // Update cached message
     var msgEle = $(dict[key].ele);
 
@@ -81,7 +89,7 @@ function Compakt(size) {
 
                 // Make key from message.
                 var key = clib.getKey(messageElement);
-                checkIfMessageRepeated(key, dict, messageElement, chatMessage);
+                checkIfMessageRepeated(key, dict, order, size, messageElement, chatMessage);
             })
         })
     });
