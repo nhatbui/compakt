@@ -4,6 +4,11 @@ var SuffixArray = require("./suffixarray.js");
 var NODE_TYPE_TEXT = 3;
 var NODE_TYPE_ELEMENT = 1;
 
+// Define sentenceArray: a mapping to take a phrase to a Twitch chat
+// message element.
+
+// Twitch chat message element: rich with media.
+
 var msgHTMLToSentenceArray = function (msgHTML) {
   // The sentence array is a minimal structure containing the words of
   // a chat message. A dictionary is provided that maps any words that
@@ -122,7 +127,7 @@ var RabinKarpTagRepeats = function(pattern, document) {
   // Using Rabin Karp, find the pattern in the document and tag each
   // repeated instance of the pattern.
   var hash = {};
-  hash[pattern] = true;
+  hash[pattern] = true; // TODO: needs to be a rolling hash!
   var count = 0;
   var newDoc = "";
   var foundInstance = false;
