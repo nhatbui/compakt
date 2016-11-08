@@ -41,7 +41,7 @@ function checkIfMessageRepeated(key, dict, order, size, messageElement, chatMess
     // the ember framework Twitch uses.
     chatMessage.hide();
   } else {
-    // Add unique message to cacheh.
+    // Add unique message to cache.
 
     // Sanitize the message.
     // Method does this "in-place" (edits existing DOM element).
