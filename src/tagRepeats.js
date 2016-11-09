@@ -17,7 +17,7 @@ var tagRepeats = function(pattern, document, tagStart, tagEnd) {
     newDoc += tagStart + pattern + " x" + count + tagEnd;
     newDoc += document.slice(
       matchIndex[matchIndex.length - 1] + pattern.length,
-      document.length - 1
+      document.length
     );
     return newDoc;
   } else {

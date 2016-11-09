@@ -4,7 +4,7 @@
 var ShuffixArray = function(s) {
   array = [];
   for (var i = 0; i < s.length; i++) {
-    if(s[i] === " ") {
+    if(s[i] === " " && (i+1) < s.length) {
       array.push(i+1);
     }
   }
