@@ -1,5 +1,6 @@
 // Longest Repeated Substring
-var SuffixArray = require("./suffixarray.js");
+//var SuffixArray = require("./suffixarray.js");
+var ShuffixArray = require("./shuffixArray.js");
 
 var longestCommonPrefix =  function (s1, s2) {
   // Given 2 strings, find the longest common prefix.
@@ -16,15 +17,15 @@ var longestCommonPrefix =  function (s1, s2) {
 
 var getLongestRepeatedSubString = function(sentence) {
   // Iterates through a suffix array and finds the longest common prefix.
-  var suffixArray = SuffixArray(sentence);
-  var size = suffixArray.length;
+  var shuffixArray = ShuffixArray(sentence);
+  var size = shuffixArray.length;
 
-  var best = "";  // longest, repeated, non-overlapping substring.
-  var minLen = 2; // length of the best match. Initialize to determine a min.
+  var best = "";  // will hold longest, repeated, non-overlapping substring.
+  var minLen = 1; // length of the best match. Initialize to determine a min.
 
   for(var i = 1; i < size; i++) {
-    var s1 = sentence.slice(suffixArray[i]);
-    var s2 = sentence.slice(suffixArray[i - 1]);
+    var s1 = sentence.slice(shuffixArray[i]);
+    var s2 = sentence.slice(shuffixArray[i - 1]);
 
     // If the string isn't long enough, skip it.
     // A string less than minLen has no change of having a prefix
@@ -43,19 +44,21 @@ var getLongestRepeatedSubString = function(sentence) {
 
     // if there was a prefix match of length minLen, make sure
     // that it is not overlapping.
-    if((suffixArray[i-1] + minLen) > suffixArray[i]) {
+    if((shuffixArray[i-1] + minLen) > shuffixArray[i]) {
       continue;
     }
 
     // if neighboring suffixes don't even match as far as
-    // the best match, don't need to check more carefully.
+    // the best match, don't need to check further.
     if (s1.slice(0, minLen) != s2.slice(0, minLen)) {
       continue;
     }
 
-    // check if match is not overlapping.
     var possibleMatch = longestCommonPrefix(s1, s2);
-    if((suffixArray[i-1] + possibleMatch.length) <= suffixArray[i]) {
+    //console.log("'" + possibleMatch + "'");
+    //console.log((shuffixArray[i-1] + possibleMatch.length) + " " +  shuffixArray[i])
+    // check if match is not overlapping.
+    if((shuffixArray[i-1] + possibleMatch.length) === shuffixArray[i] - 1) {
       best = possibleMatch;
       minLen = best.length + 1;
     }
