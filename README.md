@@ -38,6 +38,3 @@ gulp // or 'gulp --type=production' for a uglified file.
 The "official" Chrome Extension is published [here](https://chrome.google.com/webstore/detail/twitch-compakt/gfjfndigkjbiabgckjpngijjdkmebeje?hl=en-US). Official pushes of this repo to the Chrome Web Store are done as needed.
 
 Bash script ```zip.sh ``` is for creating the zipped package for the Chrome Web Store.
-
-### Trello
-Some development discussion/planning/designing are done on [Trello](https://trello.com/compakt). Feel free to message us to get added! Trello is not required for contributions: you can still just submit pull requests :)
