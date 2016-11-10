@@ -20,3 +20,4 @@ testString("wrapped at start simple repeat simple repeat simple repeat and at th
 testString("simple repeat simple repeat simple repeat.");
 testString("you youngings");
 testString("this is the best");
+testString("kung fu fun");

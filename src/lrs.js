@@ -1,5 +1,4 @@
 // Longest Repeated Substring
-//var SuffixArray = require("./suffixarray.js");
 var ShuffixArray = require("./shuffixArray.js");
 
 var longestCommonPrefix =  function (s1, s2) {
@@ -68,8 +67,16 @@ var getLongestRepeatedSubString = function(str) {
     }
 
     var possibleMatch = longestCommonPrefix(s1, s2).trim();
-    //console.log("'" + possibleMatch + "'");
-    //console.log((shuffixArray[i-1] + possibleMatch.length) + " " +  shuffixArray[i])
+
+    // check if match ends on word boundaries for both suffixes
+    var b_re = new RegExp(possibleMatch + "\\b");
+
+    if(b_re.exec(s1) == null) {
+      continue;
+    } else if(b_re.exec(s2) == null) {
+      continue;
+    }
+
     // check if match is not overlapping.
     if(shuffixArray[i-1] < shuffixArray[i]) {
       if((shuffixArray[i-1] + possibleMatch.length) === shuffixArray[i] - 1) {
