@@ -93,11 +93,11 @@ var compressedHTML = function (msgEle) {
   var sentenceArray = msgHTMLToSentenceArray(msgEle);
   var sentence = sentenceArrayToString(sentenceArray.array);
   // Add end-of-text marker.
-  var repeated = getLongestRepeatedSubString(" " + sentence + "$");
+  var repeated = getLongestRepeatedSubString(sentence);
   if(repeated.length > 0) {
     var newSentence = tagRepeats(
       repeated,
-      " " + sentence + "$",
+      sentence,
       "<span class='repeated-word'> ",
       "</span> "
     );

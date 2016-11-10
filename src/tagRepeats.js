@@ -1,11 +1,11 @@
-var tagRepeats = function(pattern, document, tagStart, tagEnd) {
+var tagRepeats = function(pattern, doc, tagStart, tagEnd) {
   // Using Rabin Karp, find the pattern in the document and tag each
   // repeated instance of the pattern.
   var re = new RegExp(pattern, 'g');
   var count = 0;
   var matchIndex = [];
 
-  while ((match = re.exec(document)) != null) {
+  while ((match = re.exec(doc)) != null) {
     // We assume that the matches are consecutive a la suffix array routine
     // earlier.
     count += 1;
@@ -13,15 +13,15 @@ var tagRepeats = function(pattern, document, tagStart, tagEnd) {
   }
 
   if (count > 1) {
-    var newDoc = document.slice(0, matchIndex[0]);
+    var newDoc = doc.slice(0, matchIndex[0]);
     newDoc += tagStart + pattern + " x" + count + tagEnd;
-    newDoc += document.slice(
+    newDoc += doc.slice(
       matchIndex[matchIndex.length - 1] + pattern.length,
-      document.length
+      doc.length
     );
     return newDoc;
   } else {
-    return document;
+    return _document;
   }
 };
 

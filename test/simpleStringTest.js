@@ -2,17 +2,18 @@ var getLRS = require("../src/lrs.js");
 var tagRepeats = require("../src/tagRepeats.js");
 var ShuffixArray = require("../src/shuffixArray.js");
 
-var s = process.argv[2];
-console.log("Test: '" + s + "'");
-var lrs = getLRS(s);
-console.log("LRS: '" + lrs + "'");
-if (lrs.length > 0) {
+var testString = function(s) {
+  console.log("Test: '" + s + "'");
+  var lrs = getLRS(s);
+  if (lrs.length > 0) {
     console.log("Result: '" + tagRepeats(lrs, s, "<", ">") + "'");
-} else {
-  console.log("Not tagging repeats.");
+  }
 }
 
-// Peek at ShuffixArray
-console.log("Peek at ShuffixArray");
-a = ShuffixArray(s);
-console.log(a);
+// Twitch chat characteristics:
+// - trimmed (no white space(s) at beginning and end)
+testString("simple repeat simple repeat simple repeat");
+testString("extra words at the start simple repeat simple repeat simple repeat");
+testString("simple repeat simple repeat simple repeat extra words at the end");
+testString("wrapped at start simple repeat simple repeat simple repeat and at the end")
+testString("simple repeat simple repeat simple repeat.");
