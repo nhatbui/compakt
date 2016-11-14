@@ -39,7 +39,8 @@
         "https://www.twitch.tv/broadcast",
         "https://www.twitch.tv/messages/*",
         "https://www.twitch.tv/settings"
-      ]
+      ],
+      "run_at": "document_end"
     }
   ],
 
