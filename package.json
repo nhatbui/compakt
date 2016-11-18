@@ -1,6 +1,6 @@
 {
   "name": "twitch_compakt",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Condense Twitch Chat",
   "main": "./src/main.js",
   "dependencies": {
