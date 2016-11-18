@@ -3,6 +3,8 @@ var clib = require("./compress.js");
 var twitch = require("./twitchvars.js");
 var shinglify = require("./shingling.js");
 
+var nextPrime = 4294967311;
+
 // Returns a random integer between min (included) and max (included)
 // Using Math.round() will give you a non-uniform distribution!
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
@@ -12,7 +14,7 @@ function getRandomIntInclusive(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-function computeMinHash(shingles, coeffA, coeffB, nextPrime) {
+function computeMinHash(shingles, coeffA, coeffB) {
   var minHashCode = nextPrime + 1;
   for (var j = 0; j < shingles.length; j++) {
     var hashCode = (coeffA*shingles[j] + coeffB) % nextPrime;
@@ -24,7 +26,7 @@ function computeMinHash(shingles, coeffA, coeffB, nextPrime) {
   return minHashCode;
 }
 
-function computeSignature(hashVars, shingles, nextPrime) {
+function computeSignature(hashVars, shingles) {
   var signature = [];
   for (var i = 0; i < hashVars.length; i++) {
     var minHashCode = computeMinHash(shingles, hashVars[i]['a'], hashVars[i]['b'], nextPrime);
@@ -33,7 +35,7 @@ function computeSignature(hashVars, shingles, nextPrime) {
   return signature;
 }
 
-function checkMessageSimilarity(key, dict, cache_shingles, shingle_size, hashVars, nextPrime) {
+function checkMessageSimilarity(key, dict, shingle_size, hashVars) {
   if (key.length < shingle_size) {
     // Key is short. No need to check MinHash.
     // Do a straight forward set existance check.
@@ -54,8 +56,8 @@ function checkMessageSimilarity(key, dict, cache_shingles, shingle_size, hashVar
     var bestPercent = 0;
     var bestMatch = null;
     // Each message in the cache
-    for (var key in cache_shingles) {
-      otherSignature = cache_shingles[key];
+    for (var key in dict) {
+      otherSignature = dict[key]['signatures'];
       var count = 0;
       // Each signature of the messages.
       for (var k = 0; k < hashVars.length; k++) {
@@ -78,10 +80,9 @@ function checkMessageSimilarity(key, dict, cache_shingles, shingle_size, hashVar
   }
 }
 
-function checkIfMessageRepeated(key, dict, cache_shingles, order, cache_size, messageElement,
-  chatMessage, shingle_size, hashVars, nextPrime) {
-  var similarityResult = checkMessageSimilarity(key, dict, cache_shingles,
-    shingle_size, hashVars, nextPrime);
+function checkIfMessageRepeated(key, dict, order, cache_size, messageElement,
+  chatMessage, shingle_size, hashVars) {
+  var similarityResult = checkMessageSimilarity(key, dict, shingle_size, hashVars);
   if (similarityResult['repeated']) {
     var accessKey = similarityResult['key'];
     // Update cached message
@@ -123,11 +124,12 @@ function checkIfMessageRepeated(key, dict, cache_shingles, order, cache_size, me
     }
 
     // Update the ordered dictionary
-    dict[key] = {ele: chatMessage, count: 1};
+    dict[key] = {
+      ele: chatMessage,
+      count: 1,
+      signatures: computeSignature(hashVars, shinglify(key, shingle_size), nextPrime)
+    };
     order.push(key);
-
-    // Update the shingles dictionary
-    cache_shingles[key] = computeSignature(hashVars, shinglify(key, shingle_size), nextPrime);
 
     // Pop old messages if we're over the size limit.
     if (order.length > cache_size) {
@@ -138,7 +140,6 @@ function checkIfMessageRepeated(key, dict, cache_shingles, order, cache_size, me
       // now delete.
       var deleteKey = order.shift();
       delete dict[deleteKey];
-      delete shingles[deleteKey];
     }
   }
 }
@@ -147,7 +148,6 @@ function checkIfMessageRepeated(key, dict, cache_shingles, order, cache_size, me
 function Compakt(cache_size) {
     // Ordered Dictionary objects
     var dict = {};
-    var shingles = {};
     var order = [];
 
     // Generate a & b for x Hash functions.
@@ -158,8 +158,6 @@ function Compakt(cache_size) {
       var b = getRandomIntInclusive(0, numHashes - 1);
       hashVars.push({a: a, b: b});
     }
-
-    var nextPrime = 4294967311;
 
     var shingle_size = 9;
 
@@ -180,8 +178,8 @@ function Compakt(cache_size) {
 
                 // Make key from message.
                 var key = clib.getKey(messageElement);
-                checkIfMessageRepeated(key, dict, shingles, order, cache_size,
-                  messageElement, chatMessage, shingle_size, hashVars, nextPrime);
+                checkIfMessageRepeated(key, dict, order, cache_size,
+                  messageElement, chatMessage, shingle_size, hashVars);
             });
         });
     });
