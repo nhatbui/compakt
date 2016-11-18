@@ -69,7 +69,12 @@ var getLongestRepeatedSubString = function(str) {
     var possibleMatch = longestCommonPrefix(s1, s2).trim();
 
     // check if match ends on word boundaries for both suffixes
-    var b_re = new RegExp(possibleMatch + "\\b");
+    try {
+      var b_re = new RegExp(possibleMatch + "\\b");
+    } catch (e) {
+      console.log("Bad regex: " + possibleMatch);
+      console.error("Shingling", e.message);
+    }
 
     if(b_re.exec(s1) == null) {
       continue;
