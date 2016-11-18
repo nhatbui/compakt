@@ -1,22 +1,10 @@
 var $ = require("jquery");
 var clib = require("./compress.js");
 var twitch = require("./twitchvars.js");
-var shinglify = require("./shingling.js");
-var computeSignature = require("./minhash.js");
+var MinHash = require("./minhash.js");
 
-var nextPrime = 4294967311;
-
-// Returns a random integer between min (included) and max (included)
-// Using Math.round() will give you a non-uniform distribution!
-// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
-function getRandomIntInclusive(min, max) {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
-function checkMessageSimilarity(key, dict, shingle_size, hashVars) {
-  if (key.length < shingle_size) {
+function checkMessageSimilarity(key, dict, minhash) {
+  if (key.length < minhash.shingle_size) {
     // Key is short. No need to check MinHash.
     // Do a straight forward set existance check.
     if (key in dict) {
@@ -26,28 +14,25 @@ function checkMessageSimilarity(key, dict, shingle_size, hashVars) {
     }
   } else {
     // Similarity Check with MinHash
-    // Get key's shingles
-    shingles = shinglify(key, shingle_size);
-
     // Compute MinHash
-    var signature = computeSignature(hashVars, shingles, nextPrime);
+    var signature = minhash.computeSignature(key);
 
     // Compare against all other MinHashes in the cached
     var bestPercent = 0;
     var bestMatch = null;
     // Each message in the cache
-    for (var key in dict) {
-      otherSignature = dict[key]['signatures'];
+    for (var msg in dict) {
+      otherSignature = dict[msg]['signatures'];
       var count = 0;
       // Each signature of the messages.
-      for (var k = 0; k < hashVars.length; k++) {
+      for (var k = 0; k < minhash.numHashes; k++) {
         count += count + (otherSignature[k] == signature[k]);
       }
       // Compute percent
-      var percent = count/hashVars.length;
+      var percent = count/minhash.numHashes;
       if (percent > bestPercent) {
         bestPercent = percent;
-        bestMatch = key;
+        bestMatch = msg;
       }
     }
 
@@ -61,8 +46,8 @@ function checkMessageSimilarity(key, dict, shingle_size, hashVars) {
 }
 
 function checkIfMessageRepeated(key, dict, order, cache_size, messageElement,
-  chatMessage, shingle_size, hashVars) {
-  var similarityResult = checkMessageSimilarity(key, dict, shingle_size, hashVars);
+  chatMessage, minhash) {
+  var similarityResult = checkMessageSimilarity(key, dict, minhash);
   if (similarityResult['repeated']) {
     var accessKey = similarityResult['key'];
     // Update cached message
@@ -107,7 +92,7 @@ function checkIfMessageRepeated(key, dict, order, cache_size, messageElement,
     dict[key] = {
       ele: chatMessage,
       count: 1,
-      signatures: computeSignature(hashVars, shinglify(key, shingle_size), nextPrime)
+      signatures: minhash.computeSignature(key)
     };
     order.push(key);
 
@@ -132,14 +117,8 @@ function Compakt(cache_size) {
 
     // Generate a & b for x Hash functions.
     var numHashes = 10;
-    var hashVars = [];
-    for (var x = 0; x < numHashes; x++) {
-      var a = getRandomIntInclusive(0, numHashes - 1);
-      var b = getRandomIntInclusive(0, numHashes - 1);
-      hashVars.push({a: a, b: b});
-    }
-
     var shingle_size = 9;
+    var minhash = MinHash(shingle_size, numHashes);
 
     // Attach listener that acts when a new chat message appears.
     return new MutationObserver(function (mutations) {
@@ -159,7 +138,7 @@ function Compakt(cache_size) {
                 // Make key from message.
                 var key = clib.getKey(messageElement);
                 checkIfMessageRepeated(key, dict, order, cache_size,
-                  messageElement, chatMessage, shingle_size, hashVars);
+                  messageElement, chatMessage, minhash);
             });
         });
     });

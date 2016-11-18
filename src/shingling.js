@@ -9,7 +9,12 @@ var crc32 = require("../node_modules/crc/lib/crc32.js");
 function shingle(collection, size) {
   var shingles = [];
   for (var i=0; i<collection.length-size+1; i++) {
-    shingles.push(crc32(collection.slice(i, i+size)));
+    try {
+      shingles.push(crc32(collection.slice(i, i+size)));
+    } catch (e) {
+      console.log("Bad slice: " + collection.slice(i, i+size));
+      console.error("Shingling", e.message);
+    }
   }
   return shingles;
 }
