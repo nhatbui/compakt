@@ -2,6 +2,7 @@ var $ = require("jquery");
 var clib = require("./compress.js");
 var twitch = require("./twitchvars.js");
 var shinglify = require("./shingling.js");
+var computeSignature = require("./minhash.js");
 
 var nextPrime = 4294967311;
 
@@ -12,27 +13,6 @@ function getRandomIntInclusive(min, max) {
   min = Math.ceil(min);
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
-function computeMinHash(shingles, coeffA, coeffB) {
-  var minHashCode = nextPrime + 1;
-  for (var j = 0; j < shingles.length; j++) {
-    var hashCode = (coeffA*shingles[j] + coeffB) % nextPrime;
-
-    if (hashCode < minHashCode) {
-      minHashCode = hashCode;
-    }
-  }
-  return minHashCode;
-}
-
-function computeSignature(hashVars, shingles) {
-  var signature = [];
-  for (var i = 0; i < hashVars.length; i++) {
-    var minHashCode = computeMinHash(shingles, hashVars[i]['a'], hashVars[i]['b'], nextPrime);
-    signature.push(minHashCode);
-  }
-  return signature;
 }
 
 function checkMessageSimilarity(key, dict, shingle_size, hashVars) {
