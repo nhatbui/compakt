@@ -1,4 +1,4 @@
-# ![compakt](assets/icon_web.svg) Twitch compakt
+# ![compakt](assets/icon_128.svg) Twitch compakt
 Twitch Chat streamlining.
 
 Compress long messages and condense repeated messages.
@@ -11,7 +11,7 @@ Let Twitch chat be Twitch chat. Don't miss any more buried messages. Reduce clut
 * Hover to see a list of all the users who uttered the same message.
 
 ## How to use it
-* compakt is a Chrome extension (so far). [Install it](https://chrome.google.com/webstore/detail/twitch-compakt/gfjfndigkjbiabgckjpngijjdkmebeje?hl=en-US) and visit a Twitch stream to see it in action.
+compakt is a Chrome extension (so far). [Install it](https://chrome.google.com/webstore/detail/twitch-compakt/gfjfndigkjbiabgckjpngijjdkmebeje?hl=en-US) and visit a Twitch stream to see it in action.
 
 ## Developers
 Pull requests always welcome!
