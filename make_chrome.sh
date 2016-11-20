@@ -1,8 +1,9 @@
 gulp --type=production;
+cp css/compaktstyles.css chrome/
 zip chrome/compakt \
     contentscript.js \
-    assets/*.png \
+    chrome/assets/*.png \
     chrome/checkIfTwitch.js \
     LICENSE.txt \
     chrome/manifest.json \
-    css/compaktstyles.css
+    chrome/compaktstyles.css
