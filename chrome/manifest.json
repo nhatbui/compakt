@@ -1,10 +1,10 @@
 {
-  "manifest_version": 3,
+  "manifest_version": 2,
 
   "name": "Twitch Compakt",
   "short_name": "Compakt",
   "description": "Condense Twitch Chat",
-  "version": "0.6",
+  "version": "0.75",
   "icons": {
     "128": "./assets/icon_128.png"
   },
