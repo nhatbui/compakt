@@ -1,19 +1,17 @@
-# ![Compakt](assets/icon_128.png) Twitch Compakt
-Twitch Chat streamlining. Condenses repeated words, emotes, and messages.
+# ![compakt](assets/icon_web.svg) Twitch compakt
+Twitch Chat streamlining.
+
+Compress long messages and condense repeated messages.
 
 Let Twitch chat be Twitch chat. Don't miss any more buried messages. Reduce clutter on the screen.
 
-[Compakt in action! (YouTube)](https://youtu.be/uGSn__YSf9w)
-As you can see, there's still a lot to be done!
-
 ## Features
 * Compresses longest repeated, non-overlapping "phrase" e.g. "Kappa Yolo Kappa Yolo" becomes "Kappa Yolo x2".
-* Repeated messages are grouped together.
+* Similar messages are grouped together.
 * Hover to see a list of all the users who uttered the same message.
 
 ## How to use it
-* Just install and visit a Twitch stream to see it in action.
-* (Options menu coming soon!)
+* compakt is a Chrome extension (so far). [Install it](https://chrome.google.com/webstore/detail/twitch-compakt/gfjfndigkjbiabgckjpngijjdkmebeje?hl=en-US) and visit a Twitch stream to see it in action.
 
 ## Developers
 Pull requests always welcome!
@@ -21,20 +19,20 @@ Pull requests always welcome!
 ### Developing
 
 #### Dependencies
-You'll need [NodeJS+NPM](https://nodejs.org/en/download/).
+You'll need [NodeJS+NPM](https://nodejs.org/en/download/) and [Gulp](https://github.com/gulpjs/gulp/blob/master/docs/getting-started.md).
 
 #### Build
 ```
 cd /path/to/compakt
 git clone https://github.com/nhatbui/compakt.git
 npm install
-gulp // or 'gulp --type=production' for a uglified file.
+./make_chrome.sh
 ```
+
+Script assumes your Gulp is installed globally.
 
 #### Developing/Testing
 [Load the extension into Chrome.](https://developer.chrome.com/extensions/getstarted#unpacked)
 
 ### Publishing
 The "official" Chrome Extension is published [here](https://chrome.google.com/webstore/detail/twitch-compakt/gfjfndigkjbiabgckjpngijjdkmebeje?hl=en-US). Official pushes of this repo to the Chrome Web Store are done as needed.
-
-Bash script ```zip.sh ``` is for creating the zipped package for the Chrome Web Store.
