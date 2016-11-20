@@ -1,0 +1,471 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		5EB946BF1DE17D190008363B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EB946BE1DE17D190008363B /* AppDelegate.swift */; };
+		5EB946C11DE17D190008363B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5EB946C01DE17D190008363B /* Assets.xcassets */; };
+		5EB946C41DE17D190008363B /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5EB946C21DE17D190008363B /* MainMenu.xib */; };
+		5EB946D21DE17D550008363B /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5EB946D11DE17D550008363B /* Cocoa.framework */; };
+		5EB946D71DE17D550008363B /* SafariExtensionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EB946D61DE17D550008363B /* SafariExtensionHandler.swift */; };
+		5EB946D91DE17D550008363B /* SafariExtensionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EB946D81DE17D550008363B /* SafariExtensionViewController.swift */; };
+		5EB946DC1DE17D550008363B /* SafariExtensionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5EB946DA1DE17D550008363B /* SafariExtensionViewController.xib */; };
+		5EB946DF1DE17D550008363B /* script.js in Resources */ = {isa = PBXBuildFile; fileRef = 5EB946DE1DE17D550008363B /* script.js */; };
+		5EB946E11DE17D550008363B /* ToolbarItemIcon.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 5EB946E01DE17D550008363B /* ToolbarItemIcon.pdf */; };
+		5EB946E41DE17D550008363B /* compakt_ext.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 5EB946CF1DE17D550008363B /* compakt_ext.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		5EB946E21DE17D550008363B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5EB946B31DE17D190008363B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 5EB946CE1DE17D550008363B;
+			remoteInfo = compakt_ext;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		5EB946E81DE17D550008363B /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				5EB946E41DE17D550008363B /* compakt_ext.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		5EB946BB1DE17D190008363B /* compakt.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = compakt.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		5EB946BE1DE17D190008363B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		5EB946C01DE17D190008363B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		5EB946C31DE17D190008363B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		5EB946C51DE17D190008363B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		5EB946CF1DE17D550008363B /* compakt_ext.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = compakt_ext.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		5EB946D11DE17D550008363B /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		5EB946D51DE17D550008363B /* compakt_ext.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = compakt_ext.entitlements; sourceTree = "<group>"; };
+		5EB946D61DE17D550008363B /* SafariExtensionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafariExtensionHandler.swift; sourceTree = "<group>"; };
+		5EB946D81DE17D550008363B /* SafariExtensionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafariExtensionViewController.swift; sourceTree = "<group>"; };
+		5EB946DB1DE17D550008363B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/SafariExtensionViewController.xib; sourceTree = "<group>"; };
+		5EB946DD1DE17D550008363B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		5EB946DE1DE17D550008363B /* script.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = script.js; sourceTree = "<group>"; };
+		5EB946E01DE17D550008363B /* ToolbarItemIcon.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = ToolbarItemIcon.pdf; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		5EB946B81DE17D190008363B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5EB946CC1DE17D550008363B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5EB946D21DE17D550008363B /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		5EB946B21DE17D190008363B = {
+			isa = PBXGroup;
+			children = (
+				5EB946BD1DE17D190008363B /* compakt */,
+				5EB946D31DE17D550008363B /* compakt_ext */,
+				5EB946D01DE17D550008363B /* Frameworks */,
+				5EB946BC1DE17D190008363B /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		5EB946BC1DE17D190008363B /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				5EB946BB1DE17D190008363B /* compakt.app */,
+				5EB946CF1DE17D550008363B /* compakt_ext.appex */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		5EB946BD1DE17D190008363B /* compakt */ = {
+			isa = PBXGroup;
+			children = (
+				5EB946BE1DE17D190008363B /* AppDelegate.swift */,
+				5EB946C01DE17D190008363B /* Assets.xcassets */,
+				5EB946C21DE17D190008363B /* MainMenu.xib */,
+				5EB946C51DE17D190008363B /* Info.plist */,
+			);
+			path = compakt;
+			sourceTree = "<group>";
+		};
+		5EB946D01DE17D550008363B /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				5EB946D11DE17D550008363B /* Cocoa.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		5EB946D31DE17D550008363B /* compakt_ext */ = {
+			isa = PBXGroup;
+			children = (
+				5EB946D61DE17D550008363B /* SafariExtensionHandler.swift */,
+				5EB946D81DE17D550008363B /* SafariExtensionViewController.swift */,
+				5EB946DA1DE17D550008363B /* SafariExtensionViewController.xib */,
+				5EB946DD1DE17D550008363B /* Info.plist */,
+				5EB946DE1DE17D550008363B /* script.js */,
+				5EB946E01DE17D550008363B /* ToolbarItemIcon.pdf */,
+				5EB946D41DE17D550008363B /* Supporting Files */,
+			);
+			path = compakt_ext;
+			sourceTree = "<group>";
+		};
+		5EB946D41DE17D550008363B /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				5EB946D51DE17D550008363B /* compakt_ext.entitlements */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		5EB946BA1DE17D190008363B /* compakt */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5EB946C81DE17D190008363B /* Build configuration list for PBXNativeTarget "compakt" */;
+			buildPhases = (
+				5EB946B71DE17D190008363B /* Sources */,
+				5EB946B81DE17D190008363B /* Frameworks */,
+				5EB946B91DE17D190008363B /* Resources */,
+				5EB946E81DE17D550008363B /* Embed App Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				5EB946E31DE17D550008363B /* PBXTargetDependency */,
+			);
+			name = compakt;
+			productName = compakt;
+			productReference = 5EB946BB1DE17D190008363B /* compakt.app */;
+			productType = "com.apple.product-type.application";
+		};
+		5EB946CE1DE17D550008363B /* compakt_ext */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5EB946E51DE17D550008363B /* Build configuration list for PBXNativeTarget "compakt_ext" */;
+			buildPhases = (
+				5EB946CB1DE17D550008363B /* Sources */,
+				5EB946CC1DE17D550008363B /* Frameworks */,
+				5EB946CD1DE17D550008363B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = compakt_ext;
+			productName = compakt_ext;
+			productReference = 5EB946CF1DE17D550008363B /* compakt_ext.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		5EB946B31DE17D190008363B /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 0810;
+				LastUpgradeCheck = 0810;
+				ORGANIZATIONNAME = "Nhat Bui";
+				TargetAttributes = {
+					5EB946BA1DE17D190008363B = {
+						CreatedOnToolsVersion = 8.1;
+						DevelopmentTeam = 9F9QV25W66;
+						ProvisioningStyle = Automatic;
+					};
+					5EB946CE1DE17D550008363B = {
+						CreatedOnToolsVersion = 8.1;
+						DevelopmentTeam = 9F9QV25W66;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 5EB946B61DE17D190008363B /* Build configuration list for PBXProject "compakt" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 5EB946B21DE17D190008363B;
+			productRefGroup = 5EB946BC1DE17D190008363B /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				5EB946BA1DE17D190008363B /* compakt */,
+				5EB946CE1DE17D550008363B /* compakt_ext */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		5EB946B91DE17D190008363B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5EB946C11DE17D190008363B /* Assets.xcassets in Resources */,
+				5EB946C41DE17D190008363B /* MainMenu.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5EB946CD1DE17D550008363B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5EB946E11DE17D550008363B /* ToolbarItemIcon.pdf in Resources */,
+				5EB946DC1DE17D550008363B /* SafariExtensionViewController.xib in Resources */,
+				5EB946DF1DE17D550008363B /* script.js in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		5EB946B71DE17D190008363B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5EB946BF1DE17D190008363B /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5EB946CB1DE17D550008363B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5EB946D91DE17D550008363B /* SafariExtensionViewController.swift in Sources */,
+				5EB946D71DE17D550008363B /* SafariExtensionHandler.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		5EB946E31DE17D550008363B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 5EB946CE1DE17D550008363B /* compakt_ext */;
+			targetProxy = 5EB946E21DE17D550008363B /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		5EB946C21DE17D190008363B /* MainMenu.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				5EB946C31DE17D190008363B /* Base */,
+			);
+			name = MainMenu.xib;
+			sourceTree = "<group>";
+		};
+		5EB946DA1DE17D550008363B /* SafariExtensionViewController.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				5EB946DB1DE17D550008363B /* Base */,
+			);
+			name = SafariExtensionViewController.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		5EB946C61DE17D190008363B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		5EB946C71DE17D190008363B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+			};
+			name = Release;
+		};
+		5EB946C91DE17D190008363B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = 9F9QV25W66;
+				INFOPLIST_FILE = compakt/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = nhatbui.compakt;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+			};
+			name = Debug;
+		};
+		5EB946CA1DE17D190008363B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = 9F9QV25W66;
+				INFOPLIST_FILE = compakt/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = nhatbui.compakt;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+			};
+			name = Release;
+		};
+		5EB946E61DE17D550008363B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = compakt_ext/compakt_ext.entitlements;
+				DEVELOPMENT_TEAM = 9F9QV25W66;
+				INFOPLIST_FILE = compakt_ext/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @executable_path/../../../../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "nhatbui.compakt.compakt-ext";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 3.0;
+			};
+			name = Debug;
+		};
+		5EB946E71DE17D550008363B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = compakt_ext/compakt_ext.entitlements;
+				DEVELOPMENT_TEAM = 9F9QV25W66;
+				INFOPLIST_FILE = compakt_ext/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @executable_path/../../../../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "nhatbui.compakt.compakt-ext";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 3.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		5EB946B61DE17D190008363B /* Build configuration list for PBXProject "compakt" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5EB946C61DE17D190008363B /* Debug */,
+				5EB946C71DE17D190008363B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		5EB946C81DE17D190008363B /* Build configuration list for PBXNativeTarget "compakt" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5EB946C91DE17D190008363B /* Debug */,
+				5EB946CA1DE17D190008363B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		5EB946E51DE17D550008363B /* Build configuration list for PBXNativeTarget "compakt_ext" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5EB946E61DE17D550008363B /* Debug */,
+				5EB946E71DE17D550008363B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 5EB946B31DE17D190008363B /* Project object */;
+}

@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>en</string>
+	<key>CFBundleDisplayName</key>
+	<string>compakt_ext</string>
+	<key>CFBundleExecutable</key>
+	<string>$(EXECUTABLE_NAME)</string>
+	<key>CFBundleIdentifier</key>
+	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>$(PRODUCT_NAME)</string>
+	<key>CFBundlePackageType</key>
+	<string>XPC!</string>
+	<key>CFBundleShortVersionString</key>
+	<string>1.0</string>
+	<key>CFBundleVersion</key>
+	<string>1</string>
+	<key>LSMinimumSystemVersion</key>
+	<string>$(MACOSX_DEPLOYMENT_TARGET)</string>
+	<key>NSExtension</key>
+	<dict>
+		<key>SFSafariStyleSheet</key>
+		<array>
+			<dict>
+				<key>Excluded URL Patterns</key>
+				<array>
+					<string>https://www.twitch.tv/settings</string>
+					<string>https://www.twitch.tv/messages/*</string>
+					<string>https://www.twitch.tv/broadcast</string>
+					<string>https://www.twitch.tv/*/dashboard</string>
+					<string>https://www.twitch.tv/*/manager*</string>
+					<string>https://www.twitch.tv/products/*</string>
+					<string>https://www.twitch.tv/p/*</string>
+					<string>https://www.twitch.tv/directory/*</string>
+				</array>
+				<key>Allowed URL Patterns</key>
+				<array>
+					<string>https://www.twitch.tv/*</string>
+				</array>
+				<key>Style Sheet</key>
+				<string>compaktstyles.css</string>
+			</dict>
+		</array>
+		<key>NSExtensionPointIdentifier</key>
+		<string>com.apple.Safari.extension</string>
+		<key>NSExtensionPrincipalClass</key>
+		<string>$(PRODUCT_MODULE_NAME).SafariExtensionHandler</string>
+		<key>SFSafariContentScript</key>
+		<array>
+			<dict>
+				<key>Excluded URL Patterns</key>
+				<array>
+					<string>https://www.twitch.tv/settings</string>
+					<string>https://www.twitch.tv/messages/*</string>
+					<string>https://www.twitch.tv/broadcast</string>
+					<string>https://www.twitch.tv/*/dashboard</string>
+					<string>https://www.twitch.tv/*/manager*</string>
+					<string>https://www.twitch.tv/products/*</string>
+					<string>https://www.twitch.tv/p/*</string>
+					<string>https://www.twitch.tv/directory/*</string>
+				</array>
+				<key>Allowed URL Patterns</key>
+				<array>
+					<string>https://www.twitch.tv/*</string>
+				</array>
+				<key>Script</key>
+				<string>script.js</string>
+			</dict>
+		</array>
+		<key>SFSafariToolbarItem</key>
+		<dict>
+			<key>Action</key>
+			<string>Command</string>
+			<key>Identifier</key>
+			<string>Button</string>
+			<key>Image</key>
+			<string>ToolbarItemIcon.pdf</string>
+			<key>Label</key>
+			<string>Your Button</string>
+		</dict>
+		<key>SFSafariWebsiteAccess</key>
+		<dict>
+			<key>Allowed Domains</key>
+			<array>
+				<string>www.twitch.tv</string>
+			</array>
+			<key>Level</key>
+			<string>Some</string>
+		</dict>
+	</dict>
+	<key>NSHumanReadableCopyright</key>
+	<string>Copyright © 2016 Nhat Bui. All rights reserved.</string>
+	<key>NSHumanReadableDescription</key>
+	<string>This is a Safari Extension. You should tell us what your extension does here.</string>
+</dict>
+</plist>
