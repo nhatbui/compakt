@@ -29,7 +29,7 @@
         "contentscript.js"
       ],
       "css": [
-        "./css/compaktstyles.css"
+        "compaktstyles.css"
       ],
       "exclude_globs": ["https://www.twitch.tv/directory/*",
         "https://www.twitch.tv/p/*",

@@ -1,7 +1,9 @@
 gulp --type=production;
+# Copy global assets into chrome folder
 cp css/compaktstyles.css chrome/
+cp contentscript.js chrome/
 zip chrome/compakt \
-    contentscript.js \
+    chrome/contentscript.js \
     chrome/assets/*.png \
     chrome/checkIfTwitch.js \
     LICENSE.txt \
