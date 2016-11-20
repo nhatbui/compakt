@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5E3482BF1DE2583900D52018 /* compaktstyles.css in Resources */ = {isa = PBXBuildFile; fileRef = 5E3482BE1DE2583900D52018 /* compaktstyles.css */; };
 		5EB946BF1DE17D190008363B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EB946BE1DE17D190008363B /* AppDelegate.swift */; };
 		5EB946C11DE17D190008363B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5EB946C01DE17D190008363B /* Assets.xcassets */; };
 		5EB946C41DE17D190008363B /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5EB946C21DE17D190008363B /* MainMenu.xib */; };
@@ -44,6 +45,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		5E3482BE1DE2583900D52018 /* compaktstyles.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = compaktstyles.css; sourceTree = "<group>"; };
 		5EB946BB1DE17D190008363B /* compakt.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = compakt.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5EB946BE1DE17D190008363B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5EB946C01DE17D190008363B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -120,6 +122,7 @@
 		5EB946D31DE17D550008363B /* compakt_ext */ = {
 			isa = PBXGroup;
 			children = (
+				5E3482BE1DE2583900D52018 /* compaktstyles.css */,
 				5EB946D61DE17D550008363B /* SafariExtensionHandler.swift */,
 				5EB946D81DE17D550008363B /* SafariExtensionViewController.swift */,
 				5EB946DA1DE17D550008363B /* SafariExtensionViewController.xib */,
@@ -236,6 +239,7 @@
 				5EB946E11DE17D550008363B /* ToolbarItemIcon.pdf in Resources */,
 				5EB946DC1DE17D550008363B /* SafariExtensionViewController.xib in Resources */,
 				5EB946DF1DE17D550008363B /* script.js in Resources */,
+				5E3482BF1DE2583900D52018 /* compaktstyles.css in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -456,6 +460,7 @@
 				5EB946CA1DE17D190008363B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		5EB946E51DE17D550008363B /* Build configuration list for PBXNativeTarget "compakt_ext" */ = {
 			isa = XCConfigurationList;
@@ -464,6 +469,7 @@
 				5EB946E71DE17D550008363B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

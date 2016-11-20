@@ -8,7 +8,7 @@ var rename = require('gulp-rename');
 gulp.task('default', function() {
   var production = gutil.env.type === 'production';
 
-  gulp.src(['./src/main.js'], {read: false})
+  gulp.src(['./src/main_chrome.js'], {read: false})
 
     // Browserify, and add source maps if this isn't a production build
     .pipe(browserify({
