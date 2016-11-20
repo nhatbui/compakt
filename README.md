@@ -1,4 +1,4 @@
-# ![compakt](assets/icon_128.svg) Twitch compakt
+# ![compakt](assets/icon_128.png) Twitch compakt
 Twitch Chat streamlining.
 
 Compress long messages and condense repeated messages.
