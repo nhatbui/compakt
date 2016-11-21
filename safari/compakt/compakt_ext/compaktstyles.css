@@ -1,0 +1,47 @@
+.repeated-word {
+  border: 1px solid #e81c4f;
+  background:  #e81c4f;
+  border-radius: 290486px;
+  color: white;
+  padding-left: 1em;
+  padding-right: 1em;
+}
+
+.count {
+  border: 1px solid #e81c4f;
+  background:  #e81c4f;
+  border-radius: 290486px;
+  color: white;
+  padding-left: 1em;
+  padding-right: 1em;
+}
+
+.compakt-dropbtn {
+    padding: 2px;
+    border: none;
+    cursor: pointer;
+}
+
+/* The container <div> - needed to position the dropdown content */
+.compakt-dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.compakt-dropdown-content {
+    background-color: white;
+    display: none;
+    position: absolute;
+}
+
+/* Links inside the dropdown */
+.compakt-dropdown-content .from {
+    padding: 2px 4px;
+    display: block;
+}
+
+/* Show the dropdown menu on hover */
+.compakt-dropdown:hover .compakt-dropdown-content {
+    display: block;
+}

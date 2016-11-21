@@ -23,9 +23,9 @@ var chatLoadedObserver = new MutationObserver(function (mutations, observer) {
 
             // Alert page action that we found a chat and we're going to get to work.
             chrome.runtime.sendMessage({twitchChat: true}, function (response) {
-                if (response.registered) {
-                    console.log("Twitch Chat found.");
-                }
+              if (response.registered) {
+                console.log("Twitch Chat found.");
+              }
             });
 
             // Unregister chatLoadedObserver. We don't need to check for the chat element anymore.
