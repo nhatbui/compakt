@@ -1,7 +1,7 @@
 var $ = require("jquery");
 var clib = require("./compress.js");
 var twitch = require("./twitchvars.js");
-var MinHash = require("./minhash.js");
+var MinHash = require("libminhash");
 
 function checkMessageSimilarity(key, dict, minhash) {
   if (key.length < minhash.shingle_size) {
