@@ -5,7 +5,8 @@
   "main": "./src/main.js",
   "dependencies": {
     "jquery": "^3.1.0",
-    "crc": "^3.4.1"
+    "crc": "^3.4.1",
+    "libhrc": "0.0.1"
   },
   "devDependencies": {
     "gulp": "^3.9.1",

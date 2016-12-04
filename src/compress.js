@@ -1,6 +1,5 @@
 var $ = require("jquery");
-var getLongestRepeatedSubString = require("./lrs.js");
-var tagRepeats = require("./tagRepeats.js");
+var libhrc = require("libhrc");
 
 var NODE_TYPE_TEXT = 3;
 var NODE_TYPE_ELEMENT = 1;
@@ -93,11 +92,13 @@ var compressedHTML = function (msgEle) {
   var sentenceArray = msgHTMLToSentenceArray(msgEle);
   var sentence = sentenceArrayToString(sentenceArray.array);
   // Add end-of-text marker.
-  var repeated = getLongestRepeatedSubString(sentence);
+  var repeated = libhrc.findLRS(sentence);
   if(repeated.length > 0) {
-    var newSentence = tagRepeats(
+    var newSentence = libhrc.tagRepeatedPhrases(
       repeated,
       sentence,
+      true,
+      "x",
       "<span class='repeated-word'> ",
       "</span> "
     );
