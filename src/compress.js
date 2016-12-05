@@ -98,7 +98,7 @@ var compressedHTML = function (msgEle) {
       repeated,
       sentence,
       true,
-      "x",
+      " x",
       "<span class='repeated-word'> ",
       "</span> "
     );
