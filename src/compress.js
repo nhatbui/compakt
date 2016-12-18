@@ -92,22 +92,15 @@ var compressedHTML = function (msgEle) {
   var sentenceArray = msgHTMLToSentenceArray(msgEle);
   var sentence = sentenceArrayToString(sentenceArray.array);
   // Add end-of-text marker.
-  var repeated = libhrc.findLRS(sentence);
-  if(repeated.length > 0) {
-    var newSentence = libhrc.tagRepeatedPhrases(
-      repeated,
-      sentence,
-      true,
-      " x",
-      "<span class='repeated-word'> ",
-      "</span> "
-    );
-    sentenceArray.array = newSentence.split(" ");
-    return constructHTMLFromSentenceArray(sentenceArray);
-  } else {
-    // No repetitions. Return null.
-    return null;
-  }
+  var newSentence = libhrc.naive_compress(
+    sentence,
+    true,
+    " x",
+    "<span class='repeated-word'> ",
+    "</span>"
+  );
+  sentenceArray.array = newSentence.split(" ");
+  return constructHTMLFromSentenceArray(sentenceArray);
 };
 
 var key = function (msgEle) {
