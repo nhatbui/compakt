@@ -1,7 +1,7 @@
-var $ = require("jquery");
-var clib = require("./compress.js");
-var twitch = require("./twitchvars.js");
-var MinHash = require("libminhash");
+var $ = require('jquery');
+var clib = require('./compress.js');
+var twitch = require('./twitchvars.js');
+var MinHash = require('libminhash');
 
 function checkMessageSimilarity(key, dict, minhash) {
   if (key.length < minhash.shingle_size) {
@@ -29,7 +29,7 @@ function checkMessageSimilarity(key, dict, minhash) {
         count += count + (otherSignature[k] == signature[k]);
       }
       // Compute percent
-      var percent = count/minhash.numHashes;
+      var percent = count / minhash.numHashes;
       if (percent > bestPercent) {
         bestPercent = percent;
         bestMatch = msg;
@@ -59,19 +59,19 @@ function checkIfMessageRepeated(key, dict, order, cache_size, messageElement,
       msgEle.append("<span class='count'></span>");
 
       // Add a dropdown menu of people who have said this repeated msg.
-      var originalMsgFrom = msgEle.children(".from");
+      var originalMsgFrom = msgEle.children('.from');
       // Add this write after the username and before the colon.
       originalMsgFrom.after("<div class='compakt-dropdown'><button class='compakt-dropbtn'>&#9660;</button><div class='compakt-dropdown-content'></div></div>");
     }
 
     // Display new count.
     dict[accessKey].count += 1;
-    var countEle = msgEle.children(".count");
+    var countEle = msgEle.children('.count');
     countEle.text(dict[accessKey].count);
 
     // Add user to dropdown menu of a repeated message.
-    var dropdownMenu = msgEle.find(".compakt-dropdown-content");
-    var userEle = chatMessage.children(".from");
+    var dropdownMenu = msgEle.find('.compakt-dropdown-content');
+    var userEle = chatMessage.children('.from');
     dropdownMenu.append(userEle);
 
     // Don't show it, it's a repeat.
@@ -84,7 +84,7 @@ function checkIfMessageRepeated(key, dict, order, cache_size, messageElement,
     // Sanitize the message.
     // Method does this "in-place" (edits existing DOM element).
     var newMsgEle = clib.getCompressedHTML(messageElement);
-    if(newMsgEle) {
+    if (newMsgEle) {
       messageElement.replaceWith(newMsgEle);
     }
 
@@ -100,7 +100,7 @@ function checkIfMessageRepeated(key, dict, order, cache_size, messageElement,
     if (order.length > cache_size) {
       // Add a check-mark to distinguish that the message has expired.
       var oldChatMessage = dict[order[0]].ele;
-      oldChatMessage.append("&#10003;");
+      oldChatMessage.append('&#10003;');
 
       // now delete.
       var deleteKey = order.shift();
@@ -121,11 +121,11 @@ function Compakt(cache_size) {
     var minhash = MinHash(shingle_size, numHashes);
 
     // Attach listener that acts when a new chat message appears.
-    return new MutationObserver(function (mutations) {
+    return new MutationObserver(function(mutations) {
         // For each mutation object, we want the addedNode object
-        mutations.forEach(function (mutation) {
+        mutations.forEach(function(mutation) {
             // Chat message should be the added node
-            mutation.addedNodes.forEach(function (addedNode) {
+            mutation.addedNodes.forEach(function(addedNode) {
                 // At this point it's potentially a chatMessage object.
                 var chatMessage = $(addedNode);
                 if (!chatMessage.is(twitch.chatMsgClass1, twitch.chatMsgClass2)) {

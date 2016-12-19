@@ -1,8 +1,8 @@
-var $ = require("jquery");
-var Compakt = require("./compakt.js");
+var $ = require('jquery');
+var Compakt = require('./compakt.js');
 
 
-document.addEventListener("DOMContentLoaded", function(event) {
+document.addEventListener('DOMContentLoaded', function(event) {
   var compakt = new Compakt(50);
 
   // configuration of the observer:
@@ -12,9 +12,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
   // We need to wait until the page is done loading everything in order to be
   // able to grab it.
   // We hijack MutationObserver as a way to check if an added, the chat.
-  var htmlBody = $("body")[0];
-  var chatLoadedObserver = new MutationObserver(function (mutations, observer) {
-    mutations.forEach(function (mutation) {
+  var htmlBody = $('body')[0];
+  var chatLoadedObserver = new MutationObserver(function(mutations, observer) {
+    mutations.forEach(function(mutation) {
       var chatSelector = $(twitchChatUlClass);
       if (chatSelector.length > 0) {
         // Select the node element.
@@ -25,19 +25,19 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
         // Alert page action that we found a chat and we're going to get to work.
         try {
-          chrome.runtime.sendMessage({twitchChat: true}, function (response) {
+          chrome.runtime.sendMessage({twitchChat: true}, function(response) {
             if (response.registered) {
-              console.log("Twitch Chat found.");
+              console.log('Twitch Chat found.');
             }
           });
-        } catch(e) {
-          console.log("Not on Chrome.");
+        } catch (e) {
+          console.log('Not on Chrome.');
         }
 
         // Unregister chatLoadedObserver. We don't need to check for the chat element anymore.
         observer.disconnect();
       }
-    })
+    });
   });
 
   chatLoadedObserver.observe(htmlBody, config);
