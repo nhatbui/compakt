@@ -92,11 +92,12 @@ var compressedHTML = function (msgEle) {
   var sentenceArray = msgHTMLToSentenceArray(msgEle);
   var sentence = sentenceArrayToString(sentenceArray.array);
   // Add end-of-text marker.
-  var newSentence = libhrc.naive_compress(
+  var newSentence = libhrc.greedy_compress(
     sentence,
+    ' ',
     true,
     " x",
-    "<span class='repeated-word'> ",
+    "<span class='repeated-word'>",
     "</span>"
   );
   sentenceArray.array = newSentence.split(" ");
