@@ -97,8 +97,8 @@ var compressedHTML = function (msgEle) {
     ' ',
     true,
     " x",
-    "<span class='repeated-word'>",
-    "</span>"
+    "<span class='repeated-word'> ",
+    " </span>"
   );
   sentenceArray.array = newSentence.split(" ");
   return constructHTMLFromSentenceArray(sentenceArray);

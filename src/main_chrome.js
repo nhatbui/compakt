@@ -1,7 +1,7 @@
 var $ = require("jquery");
 var Compakt = require("./compakt.js");
 
-var compakt = new Compakt(25);
+var compakt = new Compakt(50);
 
 // configuration of the observer:
 var config = {attributes: false, childList: true, characterData: false};
@@ -27,9 +27,6 @@ var chatLoadedObserver = new MutationObserver(function (mutations, observer) {
                 console.log("Twitch Chat found.");
               }
             });
-
-            // Unregister chatLoadedObserver. We don't need to check for the chat element anymore.
-            observer.disconnect();
         }
     })
 });

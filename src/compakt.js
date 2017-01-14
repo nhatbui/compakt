@@ -4,44 +4,10 @@ var twitch = require("./twitchvars.js");
 var MinHash = require("libminhash");
 
 function checkMessageSimilarity(key, dict, minhash) {
-  if (key.length < minhash.shingle_size) {
-    // Key is short. No need to check MinHash.
-    // Do a straight forward set existance check.
-    if (key in dict) {
-      return { 'repeated': true, 'key': key };
-    } else {
-      return { 'repeated': false };
-    }
+  if (key in dict) {
+    return { 'repeated': true, 'key': key };
   } else {
-    // Similarity Check with MinHash
-    // Compute MinHash
-    var signature = minhash.computeSignature(key);
-
-    // Compare against all other MinHashes in the cached
-    var bestPercent = 0;
-    var bestMatch = null;
-    // Each message in the cache
-    for (var msg in dict) {
-      otherSignature = dict[msg]['signatures'];
-      var count = 0;
-      // Each signature of the messages.
-      for (var k = 0; k < minhash.numHashes; k++) {
-        count += count + (otherSignature[k] == signature[k]);
-      }
-      // Compute percent
-      var percent = count/minhash.numHashes;
-      if (percent > bestPercent) {
-        bestPercent = percent;
-        bestMatch = msg;
-      }
-    }
-
-    // Check against threshold.
-    if (bestPercent > .8) {
-      return { 'repeated': true, 'key': bestMatch };
-    } else {
-      return { 'repeated': false };
-    }
+    return { 'repeated': false };
   }
 }
 
@@ -57,22 +23,12 @@ function checkIfMessageRepeated(key, dict, order, cache_size, messageElement,
     if (dict[accessKey].count === 1) {
       // Add count element.
       msgEle.append("<span class='count'></span>");
-
-      // Add a dropdown menu of people who have said this repeated msg.
-      var originalMsgFrom = msgEle.children(".from");
-      // Add this write after the username and before the colon.
-      originalMsgFrom.after("<div class='compakt-dropdown'><button class='compakt-dropbtn'>&#9660;</button><div class='compakt-dropdown-content'></div></div>");
     }
 
     // Display new count.
     dict[accessKey].count += 1;
     var countEle = msgEle.children(".count");
     countEle.text(dict[accessKey].count);
-
-    // Add user to dropdown menu of a repeated message.
-    var dropdownMenu = msgEle.find(".compakt-dropdown-content");
-    var userEle = chatMessage.children(".from");
-    dropdownMenu.append(userEle);
 
     // Don't show it, it's a repeat.
     // Note: we would like to .remove() it but this causes errors with
