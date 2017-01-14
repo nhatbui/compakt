@@ -1,4 +1,4 @@
-gulp --production --gulpfile gulpfile_chrome.js;
+gulp --type=production --gulpfile gulpfile_chrome.js;
 # Copy global assets into chrome folder
 cp css/compaktstyles.css chrome/
 cp src/jquery.slim.min.js chrome/

@@ -1,7 +1,6 @@
 var browserify = require('gulp-browserify');
 var gulp = require('gulp');
 var gutil = require('gulp-util');
-uglify = require('gulp-uglify');
 var rename = require('gulp-rename');
 
 
@@ -14,8 +13,6 @@ gulp.task('default', function() {
     .pipe(browserify({
       debug: !production
     }))
-
-    .pipe(production ? uglify() : gutil.noop())
 
     // Rename the destination file
     .pipe(rename('compakt.js'))
