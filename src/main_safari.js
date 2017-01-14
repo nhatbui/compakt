@@ -33,9 +33,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
         } catch(e) {
           console.log("Not on Chrome.");
         }
-
-        // Unregister chatLoadedObserver. We don't need to check for the chat element anymore.
-        observer.disconnect();
       }
     })
   });
