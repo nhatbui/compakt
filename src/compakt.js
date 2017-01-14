@@ -1,9 +1,8 @@
 var $ = require("jquery");
 var clib = require("./compress.js");
 var twitch = require("./twitchvars.js");
-var MinHash = require("libminhash");
 
-function checkMessageSimilarity(key, dict, minhash) {
+function checkMessageSimilarity(key, dict) {
   if (key in dict) {
     return { 'repeated': true, 'key': key };
   } else {
@@ -12,8 +11,8 @@ function checkMessageSimilarity(key, dict, minhash) {
 }
 
 function checkIfMessageRepeated(key, dict, order, cache_size, messageElement,
-  chatMessage, minhash) {
-  var similarityResult = checkMessageSimilarity(key, dict, minhash);
+  chatMessage) {
+  var similarityResult = checkMessageSimilarity(key, dict);
   if (similarityResult['repeated']) {
     var accessKey = similarityResult['key'];
     // Update cached message
@@ -48,7 +47,6 @@ function checkIfMessageRepeated(key, dict, order, cache_size, messageElement,
     dict[key] = {
       ele: chatMessage,
       count: 1,
-      signatures: minhash.computeSignature(key)
     };
     order.push(key);
 
@@ -74,7 +72,6 @@ function Compakt(cache_size) {
     // Generate a & b for x Hash functions.
     var numHashes = 10;
     var shingle_size = 9;
-    var minhash = MinHash(shingle_size, numHashes);
 
     // Attach listener that acts when a new chat message appears.
     return new MutationObserver(function (mutations) {
@@ -94,7 +91,7 @@ function Compakt(cache_size) {
                 // Make key from message.
                 var key = clib.getKey(messageElement);
                 checkIfMessageRepeated(key, dict, order, cache_size,
-                  messageElement, chatMessage, minhash);
+                  messageElement, chatMessage);
             });
         });
     });
