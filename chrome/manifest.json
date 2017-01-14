@@ -4,7 +4,7 @@
   "name": "Twitch Compakt",
   "short_name": "Compakt",
   "description": "Condense Twitch Chat",
-  "version": "0.8",
+  "version": "0.90",
   "icons": {
     "128": "./assets/icon_128.png"
   },
@@ -26,7 +26,8 @@
     {
       "matches": ["https://www.twitch.tv/*"],
       "js": [
-        "contentscript.js"
+        "jquery.slim.min.js",
+        "compakt.js"
       ],
       "css": [
         "compaktstyles.css"
