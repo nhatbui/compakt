@@ -1,4 +1,3 @@
-var $ = require("jquery");
 var clib = require("./compress.js");
 var twitch = require("./twitchvars.js");
 

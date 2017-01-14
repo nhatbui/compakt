@@ -1,4 +1,3 @@
-var $ = require("jquery");
 var libhrc = require("libhrc");
 
 var NODE_TYPE_TEXT = 3;

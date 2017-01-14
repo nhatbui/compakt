@@ -1,4 +1,3 @@
-var $ = require("jquery");
 var Compakt = require("./compakt.js");
 
 var compakt = new Compakt(50);

@@ -18,7 +18,7 @@ gulp.task('default', function() {
     .pipe(production ? uglify() : gutil.noop())
 
     // Rename the destination file
-    .pipe(rename('contentscript.js'))
+    .pipe(rename('compakt.js'))
 
     // Output to the build directory
     .pipe(gulp.dest('./'));
