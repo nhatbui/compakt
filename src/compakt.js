@@ -80,7 +80,7 @@ function Compakt(cache_size) {
             mutation.addedNodes.forEach(function (addedNode) {
                 // At this point it's potentially a chatMessage object.
                 var chatMessage = $(addedNode);
-                if (!chatMessage.is(twitch.chatMsgClass1, twitch.chatMsgClass2)) {
+                if (!chatMessage.is(twitch.chatMsg1Selector, twitch.chatMsg2Selector)) {
                     // this isn't a chat message, skip processing.
                     return;
                 }

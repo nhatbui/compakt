@@ -1,5 +1,5 @@
 var Compakt = require("./compakt.js");
-
+var vars = require("./twitchvars.js");
 var compakt = new Compakt(50);
 
 // configuration of the observer:
@@ -12,7 +12,7 @@ var config = {attributes: false, childList: true, characterData: false};
 var htmlBody = $("body")[0];
 var chatLoadedObserver = new MutationObserver(function (mutations, observer) {
     mutations.forEach(function (mutation) {
-        var chatSelector = $(twitchChatUlClass);
+        var chatSelector = $(vars.chatULSelector);
         if (chatSelector.length > 0) {
             // Select the node element.
             var target = chatSelector[0];
