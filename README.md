@@ -8,9 +8,9 @@ Let Twitch chat be Twitch chat. Don't miss any more buried messages. Reduce clut
 ## Features
 * Compresses longest repeated, non-overlapping "phrase" e.g. "Kappa Yolo Kappa Yolo" becomes "Kappa Yolo x2".
 * Similar messages are grouped together.
-* Hover to see a list of all the users who uttered the same message.
+* BetterTTV Emotes!
 
-## How to use it
+## Get it!
 compakt is a Chrome extension (so far). [Install it](https://chrome.google.com/webstore/detail/twitch-compakt/gfjfndigkjbiabgckjpngijjdkmebeje?hl=en-US) and visit a Twitch stream to see it in action.
 
 ## Developers
