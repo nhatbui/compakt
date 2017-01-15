@@ -4,7 +4,9 @@
   "description": "Condense Twitch Chat",
   "main": "./src/main.js",
   "dependencies": {
-    "libhrc": "^0.2.1"
+    "libhrc": "^0.2.1",
+    "twemoji": "^2.2.0",
+    "emojilib": "^2.0.2"
   },
   "devDependencies": {
     "gulp": "^3.9.1",

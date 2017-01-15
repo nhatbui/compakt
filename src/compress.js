@@ -1,7 +1,12 @@
 var libhrc = require("libhrc");
+var loadBTTVEmotes = require("./bttvemotes.js");
 
 var NODE_TYPE_TEXT = 3;
 var NODE_TYPE_ELEMENT = 1;
+
+var bttvEmotes = loadBTTVEmotes();
+
+//<img class="emoticon" src="//static-cdn.jtvnw.net/emoticons/v1/139945/1.0" srcset="//static-cdn.jtvnw.net/emoticons/v1/139945/2.0 2x" alt="tattedLOL">
 
 // Define sentenceArray: a mapping to take a phrase to a Twitch chat
 // message element.
@@ -62,19 +67,30 @@ var sentenceArrayToString = function(sentenceArray) {
 var constructHTMLFromSentenceArray = function (sentenceArr) {
   var newHTML = "";
   for(var i = 0; i < sentenceArr.array.length - 1; i++) {
-    if(sentenceArr.array[i] in sentenceArr.emotes) {
-      newHTML += sentenceArr.emotes[sentenceArr.array[i]] + " ";
+    var word = sentenceArr.array[i];
+    if(word in sentenceArr.emotes) {
+      newHTML += sentenceArr.emotes[word] + " ";
+    } else if(word in bttvEmotes.bttvEmotes) {
+      var imgURL = bttvEmotes.bttvEmotes[word].url;
+      var imgTag = '<img class="emoticon" src="' + imgURL + '" alt="' + word + '"';
+      newHTML += imgTag + " "; 
     } else {
       newHTML += sentenceArr.array[i] + " ";
     }
   }
 
   // Append the last word.
-  if(sentenceArr.array[i] in sentenceArr.emotes) {
-    newHTML += sentenceArr.emotes[sentenceArr.array[i]];
+  var word = sentenceArr.array[i];
+  if(word in sentenceArr.emotes) {
+    newHTML += sentenceArr.emotes[word];
+  } else if(word in bttvEmotes.bttvEmotes) {
+      var imgURL = bttvEmotes.bttvEmotes[word].url;
+      var imgTag = '<img class="emoticon" src="' + imgURL + '" alt="' + word + '"';
+      newHTML += imgTag; 
   } else {
-    newHTML += sentenceArr.array[i];
+    newHTML += word;
   }
+
   return "<span class='message' style>" + newHTML + "</span>";
 };
 
