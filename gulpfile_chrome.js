@@ -18,5 +18,5 @@ gulp.task('default', function() {
     .pipe(rename('compakt.js'))
 
     // Output to the build directory
-    .pipe(gulp.dest('./'));
+    .pipe(gulp.dest('./chrome'));
 });

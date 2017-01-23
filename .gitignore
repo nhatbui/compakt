@@ -1,6 +1,9 @@
 node_modules/*
 .idea/*
 chrome/compakt.zip
+chrome/compakt.js
+chrome/compaktstyles.css
+chrome/jquery.min.js
 *.DS_Store
 
 
