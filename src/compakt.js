@@ -2,31 +2,29 @@ var clib = require("./compress.js");
 var twitch = require("./twitchvars.js");
 
 function checkMessageSimilarity(key, dict) {
-  if (key in dict) {
-    return { 'repeated': true, 'key': key };
+  if (dict.hasOwnProperty(key)) {
+    return true;
   } else {
-    return { 'repeated': false };
+    return false;
   }
 }
 
 function checkIfMessageRepeated(key, dict, order, cache_size, messageElement,
   chatMessage) {
-  var similarityResult = checkMessageSimilarity(key, dict);
-  if (similarityResult['repeated']) {
-    var accessKey = similarityResult['key'];
+  if (checkMessageSimilarity(key, dict)) {
     // Update cached message
-    var msgEle = $(dict[accessKey].ele);
+    var msgEle = $(dict[key].ele);
 
     // If this is the first repeat, we need to add some elements.
-    if (dict[accessKey].count === 1) {
+    if (dict[key].count === 1) {
       // Add count element.
       msgEle.append("<span class='count'></span>");
     }
 
     // Display new count.
-    dict[accessKey].count += 1;
+    dict[key].count += 1;
     var countEle = msgEle.children(".count");
-    countEle.text(dict[accessKey].count);
+    countEle.text(dict[key].count);
 
     // Don't show it, it's a repeat.
     // Note: we would like to .remove() it but this causes errors with
@@ -67,10 +65,6 @@ function Compakt(cache_size) {
     // Ordered Dictionary objects
     var dict = {};
     var order = [];
-
-    // Generate a & b for x Hash functions.
-    var numHashes = 10;
-    var shingle_size = 9;
 
     // Attach listener that acts when a new chat message appears.
     return new MutationObserver(function (mutations) {

@@ -1,22 +1,21 @@
 var libhrc = require("libhrc");
 var loadBTTVEmotes = require("./bttvemotes.js");
 
+// Variables for Node types.
 var NODE_TYPE_TEXT = 3;
 var NODE_TYPE_ELEMENT = 1;
 
+// Load all our BTTV emotes.
 var bttvEmotes = loadBTTVEmotes();
 
-//<img class="emoticon" src="//static-cdn.jtvnw.net/emoticons/v1/139945/1.0" srcset="//static-cdn.jtvnw.net/emoticons/v1/139945/2.0 2x" alt="tattedLOL">
-
-// Define sentenceArray: a mapping to take a phrase to a Twitch chat
-// message element.
-
-// Twitch chat message element: rich with media.
-
+/**
+ * The sentence array is a minimal structure containing the words of
+ * a chat message. A dictionary is provided that maps any words that
+ * manifests as an emote.
+ * @param {node} msgHTML - JQuery node element for Twitch's .chat-line/.message-line.
+ * @return {Object} An array of token and a dictionary of tokens to emotes.
+ */
 var msgHTMLToSentenceArray = function (msgHTML) {
-  // The sentence array is a minimal structure containing the words of
-  // a chat message. A dictionary is provided that maps any words that
-  // manifests as an emote.
   var sentenceArray = [], emoteDictionary = {};
   var contents = msgHTML.contents();
   for (var i = 0; i < contents.length; i++) {
@@ -26,17 +25,14 @@ var msgHTMLToSentenceArray = function (msgHTML) {
       // Trim, split, and push each word onto the sentence array
       // Trimming is important here. We remove all the white spaces from
       // the HTML doc.
-      var txt = contents[i].textContent.trim();
-      if(txt != "") {
-        var txtArray = txt.split(" ");
-        for(var j = 0; j < txtArray.length; j++) {
-          sentenceArray.push(txtArray[j]);
-        }
-      }
+      sentenceArray = sentenceArray.concat(
+        contents[i].textContent.trim().split(' ').filter(
+          function (x) { return x.length > 0; }
+        )
+      );
     } else if(nodeType === NODE_TYPE_ELEMENT) {
       // Element node, assume native Twitch emote
       // Note: could be an injected emote by another extension e.g. BetterTTV
-      // TODO: Compatibility with other extensions!
 
       // Extract the name for the emote.
       var element = $(contents[i]);
@@ -53,57 +49,53 @@ var msgHTMLToSentenceArray = function (msgHTML) {
   }
 };
 
-var sentenceArrayToString = function(sentenceArray) {
-  // Given an array of strings, create a sentence with one whitespace between
-  // each string.
-  var str = "";
-  for(var i = 0; i < sentenceArray.length - 1; i++) {
-    str += sentenceArray[i] + " ";
-  }
-  str += sentenceArray[i];
-  return str;
+/**
+ * Given an array of tokens, create a sentence with one whitespace between 
+ * each string.
+ * @param {tokens} tokens - array of tokens.
+ * @return {string} string of tokens delimited by one white space.
+ */
+var sentenceArrayToString = function(tokens) {
+  return tokens.join(' ');
 };
 
-var constructHTMLFromSentenceArray = function (sentenceArr) {
-  var newHTML = "";
-  for(var i = 0; i < sentenceArr.array.length - 1; i++) {
-    var word = sentenceArr.array[i];
-    if(word in sentenceArr.emotes) {
-      newHTML += sentenceArr.emotes[word] + " ";
-    } else if(word in bttvEmotes.bttvEmotes) {
-      var imgURL = bttvEmotes.bttvEmotes[word].url;
-      var imgTag = '<img class="emoticon" src="' + imgURL + '" alt="' + word + '"';
-      newHTML += imgTag + " "; 
+/**
+ * @param {Object} sentenceObj - Object with an array of tokens and a dictionary
+ * of tokens to emotes.
+ * @return {string} string containing HTML element.
+ */
+var constructHTMLFromSentenceArray = function (sentenceObj) {
+  var checkIfEmote = function (token) {
+    if(token in sentenceObj.emotes) {
+      return sentenceObj.emotes[token];
+    } else if(token in bttvEmotes.bttvEmotes) {
+      var imgURL = bttvEmotes.bttvEmotes[token].url;
+      var imgTag = '<img class="emoticon" src="' + imgURL + '" alt="' + token + '"';
+      return imgTag;
     } else {
-      newHTML += sentenceArr.array[i] + " ";
+      return token;
     }
-  }
+  };
 
-  // Append the last word.
-  var word = sentenceArr.array[i];
-  if(word in sentenceArr.emotes) {
-    newHTML += sentenceArr.emotes[word];
-  } else if(word in bttvEmotes.bttvEmotes) {
-      var imgURL = bttvEmotes.bttvEmotes[word].url;
-      var imgTag = '<img class="emoticon" src="' + imgURL + '" alt="' + word + '"';
-      newHTML += imgTag; 
-  } else {
-    newHTML += word;
-  }
-
-  return "<span class='message' style>" + newHTML + "</span>";
+  return sentenceObj.array.reduce(function (a, b) {
+    return checkIfEmote(a) + " " + checkIfEmote(b);
+  });
 };
 
+/**
+ * msgEle is a chat message HTML element from Twitch.
+ * Take a chat message HTML element, compress the content, and return the
+ * new chat message HTML element.
+ 
+ * The sentence array is a necessary intermediate data structure.
+ * We want to give the "getLongestRepeatedSubString()" a clean sentence,
+ * one with just words, punctuations and spaces. NO HTML fragments.
+ * The sentence array also allows us to map words back to HTML elements,
+ * mostly for emotes.
+ * @param {Object} msgEle - JQuery node object for .chat-line/.message-line.
+ * @return {string} - New HTML element.
+ */
 var compressedHTML = function (msgEle) {
-  // msgEle is a chat message HTML element from Twitch.
-  // Take a chat message HTML element, compress the content, and return the
-  // new chat message HTML element.
-
-  // The sentence array is a necessary intermediate data structure.
-  // We want to give the "getLongestRepeatedSubString()" a clean sentence,
-  // one with just words, punctuations and spaces. NO HTML fragments.
-  // The sentence array also allows us to map words back to HTML elements,
-  // mostly for emotes.
   var sentenceArray = msgHTMLToSentenceArray(msgEle);
   var sentence = sentenceArrayToString(sentenceArray.array);
   // Add end-of-text marker.
@@ -119,10 +111,16 @@ var compressedHTML = function (msgEle) {
   return constructHTMLFromSentenceArray(sentenceArray);
 };
 
+/**
+ * Reduce the chat line to a key. Used to find repeated messages.
+ * @param {Object} msgEle - JQuery node object for .chat-line/.message-line.
+ * @return {string} - compressed string representing the chat line.
+ */
 var key = function (msgEle) {
   // msgEle is a chat message HTML element from Twitch.
-  var sentenceArray = msgHTMLToSentenceArray(msgEle);
-  return sentenceArrayToString(sentenceArray.array).toLowerCase();
+  var sentenceObj = msgHTMLToSentenceArray(msgEle);
+  var sentence = sentenceArrayToString(sentenceObj.array).toLowerCase();
+  return libhrc.greedy_compress(sentence, ' ', false, '', '', '');
 };
 
 module.exports.getKey = key;
