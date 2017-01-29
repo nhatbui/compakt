@@ -7,7 +7,7 @@ var rename = require('gulp-rename');
 gulp.task('default', function() {
   var production = gutil.env.type === 'production';
 
-  gulp.src(['./src/main_chrome.js'], {read: false})
+  gulp.src([gutil.env.main], {read: false})
 
     // Browserify, and add source maps if this isn't a production build
     .pipe(browserify({
@@ -18,5 +18,5 @@ gulp.task('default', function() {
     .pipe(rename('compakt.js'))
 
     // Output to the build directory
-    .pipe(gulp.dest('./chrome'));
+    .pipe(gulp.dest('.'));
 });
