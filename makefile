@@ -2,7 +2,9 @@ chrome: chrome_compakt.js compaktstyles.css jquery.min.js checkIfTwitch.js manif
 	mkdir -p build
 	zip build/compakt.zip \
 	    compakt.js \
-	    assets/*.png \
+	    assets/icon19.png \
+	    assets/icon38.png \
+	    assets/icon_128.png \
 	    checkIfTwitch.js \
 	    manifest.json \
 	    jquery.min.js \
