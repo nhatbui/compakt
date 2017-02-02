@@ -19,17 +19,16 @@ Pull requests always welcome!
 ### Developing
 
 #### Dependencies
-You'll need [NodeJS+NPM](https://nodejs.org/en/download/) and [Gulp](https://github.com/gulpjs/gulp/blob/master/docs/getting-started.md).
+You'll need [NodeJS+NPM](https://nodejs.org/en/download/).
 
 #### Build
 ```
+mkdir /path/to/compakt
 cd /path/to/compakt
 git clone https://github.com/nhatbui/compakt.git
 npm install
-./make_chrome.sh
+make chrome
 ```
-
-Script assumes your Gulp is installed globally.
 
 #### Developing/Testing
 [Load the extension into Chrome.](https://developer.chrome.com/extensions/getstarted#unpacked)

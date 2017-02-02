@@ -20,9 +20,9 @@ compaktstyles.css:
 jquery.min.js:
 	cp src/jquery.min.js . 
 chrome_compakt.js: gulpfile.js
-	gulp --type=production --main=./src/main_chrome.js
+	./node_modules/.bin/gulp --type=production --main=./src/main_chrome.js
 safari_compakt.js: gulpfile.js
-	gulp --type=production --main=./src/main_safari.js
+	./node_modules/.bin/gulp --type=production --main=./src/main_safari.js
 checkIfTwitch.js:
 	cp chrome/checkIfTwitch.js .
 manifest.json:
