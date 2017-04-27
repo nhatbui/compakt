@@ -10,6 +10,8 @@ chrome: chrome_compakt.js compaktstyles.css jquery.min.js checkIfTwitch.js manif
 	    jquery.min.js \
 	    compaktstyles.css
 	rm compaktstyles.css jquery.min.js compakt.js checkIfTwitch.js manifest.json
+chrome-dev: chrome
+	unzip -u -o build/compakt.zip -d build
 safari: safari_compakt.js compaktstyles.css jquery.min.js
 	cp compakt.js safari/compakt/compakt_ext/script.js;
 	cp compaktstyles.css safari/compakt/compakt_ext/;

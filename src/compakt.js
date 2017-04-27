@@ -79,7 +79,7 @@ function Compakt(cache_size) {
                     return;
                 }
                 // Grab the actual span element with the message content
-                var messageElement = chatMessage.children(twitch.chatMsgContent);
+                var messageElement = chatMessage.find(twitch.chatMsgContent);
 
                 // Make key from message.
                 var key = clib.getKey(messageElement);
